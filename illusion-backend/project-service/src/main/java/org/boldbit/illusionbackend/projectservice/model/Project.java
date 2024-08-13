@@ -1,4 +1,4 @@
-package org.boldbit.illusionbackend.userservice.model;
+package org.boldbit.illusionbackend.projectservice.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

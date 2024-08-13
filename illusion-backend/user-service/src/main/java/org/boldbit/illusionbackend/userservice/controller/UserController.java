@@ -33,5 +33,14 @@ public class UserController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping()
+    private User getUser(@PathVariable String id){
+        try {
+            return userService.getUser(id);
+        } catch (Exception e){
+            throw new RuntimeException(e);
+        }
+    }
 }
 

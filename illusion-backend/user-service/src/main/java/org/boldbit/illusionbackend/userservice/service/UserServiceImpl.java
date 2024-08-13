@@ -28,4 +28,9 @@ public class UserServiceImpl implements UserService {
             log.info("Sign in failed");
         }
     }
+
+    @Override
+    public User getUser(String id) {
+        return userRepository.findById(id).orElse(null);
+    }
 }

@@ -24,5 +24,5 @@ public class User {
     String email;
     String password;
 
-    private List<Project> projects;
+    private List<Object> projects;
 }
