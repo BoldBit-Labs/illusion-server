@@ -34,8 +34,8 @@ public class UserController {
         }
     }
 
-    @GetMapping()
-    private User getUser(@PathVariable String id){
+    @GetMapping("/{id}")
+    private User getCurrentUser(@PathVariable String id){
         try {
             return userService.getUser(id);
         } catch (Exception e){
