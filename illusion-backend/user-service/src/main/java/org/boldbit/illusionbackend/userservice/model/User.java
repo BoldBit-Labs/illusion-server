@@ -6,23 +6,31 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.Instant;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "UsersCollection")
+@Document(collection = "users")
 public class User {
 
     @Id
-    String userId;
-    String firstName;
-    String lastName;
+    private String userId;
+    private String fullName;
 
     @Indexed(unique = true)
-    String email;
-    String password;
+    private String email;
+    private String password;
 
-    private List<Object> projects;
+    @Field("project_ids")
+    private List<String> projectIds;
+
+    @Field("created_at")
+    private Instant createdAt;
+
+    @Field("updated_at")
+    private Instant updatedAt;
 }
