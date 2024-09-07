@@ -1,59 +1,21 @@
-import React, { useState } from "react";
-import AuthService from "../services/AuthService";
-import { useNavigate } from "react-router-dom";
-
-function LoginPage() {
-  const [email, setEmail] = useState("");
-  const navigate = useNavigate();
-
-  const submit = (e) => {
-    e.preventDefault();
-    console.log("email: ", email);
-    AuthService.login(email).then(
-      () => {
-        navigate("/profile");
-      }
-      // () => {
-      //     setError('Invalid username or password');
-      // }
-    );
-    alert("Form submitted");
-  };
-  return (
-    <div className="flex items-center justify-center h-screen">
-      <div className="w-96 h-72 rounded-3xl flex items-center justify-center backdrop-blur-3xl bg-slate-100 text-black">
-        <form onSubmit={submit}>
-          <div className="relative">
-            <input
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="block w-full rounded-2xl border border-neutral-300 bg-transparent py-4 pl-6 pr-20 text-base/6 text-neutral-950 
-                        ring-4 ring-transparent transition placeholder:text-neutral-500 focus:border-neutral-950 focus:outline-none focus:ring-neutral-950/5"
-            />
-            <div className="absolute inset-y-1 right-1 flex justify-end">
-              <button
-                type="submit"
-                aria-label="Submit"
-                className="flex aspect-square h-full items-center justify-center rounded-xl bg-neutral-950 text-white transition hover:scale-90 duration-200"
-              >
-                <svg viewBox="0 0 16 6" aria-hidden="true" className="w-4">
-                  <path
-                    fill="currentColor"
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M16 3 10 .5v2H0v1h10v2L16 3Z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-export default LoginPage;
+<div className="relative mx-auto mt-14 mb-5 rounded-2xl bg-white shadow-md max-w-md" style="opacity: 1; transform: translateY(0px) translateZ(0px);"><div className="flex items-center justify-between p-4"><h1 className="text-xs uppercase tracking-wider font-bold text-gray-500">New project</h1><button className="box-border relative transition hover:scale-105 active:scale-95
+    shadow active:shadow-sm focus:outline outline-2 outline-offset-2
+    outline-blue-500 hover:outline-none cursor-pointer w-9 h-9 rounded-xl bg-transparent hover:bg-gray-200 active:bg-gray-300 shadow-none disabled:shadow-none
+      disabled:bg-gray-100"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" className="w-full"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></button></div><form className="grid grid-cols-1 gap-6 px-4"><div className="space-y-3 font-mono"><div className="space-y-1"><div className="flex items-center justify-between gap-2"><label className="text-lg font-semibold font-mono">Name</label></div></div><div className="space-y-2"><input className="appearance-none px-3 py-2 rounded-xl bg-gray-100 w-full
+  border border-gray-100 text-base font-mono focus:outline outline-2
+  outline-offset-2 outline-blue-500 hover:bg-gray-200 hover:border-gray-200
+  focus:bg-gray-100 focus:border-gray-100 disabled:text-gray-500 disabled:bg-gray-50 disabled:border disabled:border-gray-200
+  disabled:cursor-not-allowed read-only:bg-gray-50 read-only:border-gray-200 undefined" autocomplete="off" placeholder="Example: Todo App, Project X..." name="name" type="text" value=""></div></div><div className="space-y-3 font-mono"><div className="space-y-1"><div className="flex items-center justify-between gap-2"><label className="text-lg font-semibold font-mono">API Prefix</label></div><div className="text-sm text-gray-900">Add API prefix to all endpoints in this project.</div></div><div className="space-y-2"><input className="appearance-none px-3 py-2 rounded-xl bg-gray-100 w-full
+  border border-gray-100 text-base font-mono focus:outline outline-2
+  outline-offset-2 outline-blue-500 hover:bg-gray-200 hover:border-gray-200
+  focus:bg-gray-100 focus:border-gray-100 disabled:text-gray-500 disabled:bg-gray-50 disabled:border disabled:border-gray-200
+  disabled:cursor-not-allowed read-only:bg-gray-50 read-only:border-gray-200 undefined" autocomplete="off" placeholder="Example: /api/v1" name="prefix" type="text" value=""></div></div><div className="grid grid-cols-2 gap-4 sticky bottom-0 justify-between
+          p-4 bg-gray-50 rounded-br-2xl rounded-bl-2xl -mx-4"><button type="button" className="w-full appearance-none truncate box-border transition active:scale-95 shadow
+    active:shadow-sm focus:outline outline-2 outline-offset-2 outline-blue-500
+    hover:outline-none border-2 border-transparent font-medium
+    disabled:opacity-75 disabled:shadow-none disabled:pointer-events-none
+    cursor-pointer bg-transparent bg-transparent hover:bg-gray-200 active:bg-gray-300 shadow-none px-3 py-2 rounded-2xl text-base">Cancel</button><button type="submit" className="w-full appearance-none truncate box-border transition active:scale-95 shadow
+    active:shadow-sm focus:outline outline-2 outline-offset-2 outline-blue-500
+    hover:outline-none border-2 border-transparent font-medium
+    disabled:opacity-75 disabled:shadow-none disabled:pointer-events-none
+    cursor-pointer bg-blue-500 shadow-blue-500/50 hover:bg-blue-600 active:bg-blue-700 text-white px-3 py-2 rounded-2xl text-base" disabled="">Create</button></div></form></div>

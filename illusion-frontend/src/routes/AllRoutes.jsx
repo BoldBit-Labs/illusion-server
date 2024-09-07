@@ -8,11 +8,12 @@ import {
 import MainLayout from "../layouts/MainLayout";
 import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage";
-import SigninPage from "../pages/SigninPage";
-import SignupPage from "../pages/SignupPage";
-import Dashboard from "../pages/Dashboard";
+import SigninPage from "../pages/authPages/SigninPage";
+import SignupPage from "../pages/authPages/SignupPage";
+import Dashboard from "../pages/HomePage/Dashboard";
 import authServiceInstance from "../services/AuthService";
-import Projects from "../pages/projectsPage/Projects";
+import NewProject from "../pages/projectsPage/NewProject";
+import Project from "../pages/projectsPage/Project";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,7 +21,8 @@ const router = createBrowserRouter(
       <Route index element={<ProtectedRoute Component1={Dashboard} Component2={HomePage} />} />
       <Route path="/signin" element={<ProtectedRoute Component1={Dashboard} Component2={SigninPage} />} />
       <Route path="/signup" element={<ProtectedRoute Component1={Dashboard} Component2={SignupPage} />} />
-      <Route path="/projects" element={<Projects />} />
+      <Route path="/create-project" element={<ProtectedRoute Component1={NewProject} Component2={NotFoundPage} />} />
+      <Route path="/projects/:projectId" element={<ProtectedRoute Component1={Project} Component2={NotFoundPage} />} />
 
       <Route path="*" element={<NotFoundPage />} />
     </Route>

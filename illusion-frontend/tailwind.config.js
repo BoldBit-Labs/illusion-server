@@ -18,6 +18,9 @@ module.exports = {
           '100%': { opacity: 1 },
         },
       },
+      padding: {
+        'safe-top': '8rem',  // Custom padding value for safe area
+      },
     },
   },
   plugins: [],

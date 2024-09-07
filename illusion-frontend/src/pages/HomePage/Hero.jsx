@@ -1,4 +1,5 @@
 import React from "react";
+import Text from "../../components/Text";
 
 function Hero() {
     return (
@@ -6,9 +7,7 @@ function Hero() {
             <h1 className="text-[5.5rem] font-bold font-aeonik-pro drop-shadow-lg">
                 Backend in<span className="ml-4 animate-blink text-yellow-300">Blink</span>
             </h1>
-            <p className="mt-4 text-lg font-light tracking-wide max-w-2xl mx-auto">
-                Dream. Design. Develop. Deliver. Illusion Server handles the backend.
-            </p>
+            <Text>Dream. Design. Develop. Deliver. Illusion Server handles the backend.</Text>
         </div>
     );
 }

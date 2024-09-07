@@ -8,7 +8,7 @@ class AuthService {
         { email, password }
       );
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(email));
+        localStorage.setItem("user", JSON.stringify(response.data));
         return true;
       }
 
@@ -21,12 +21,11 @@ class AuthService {
 
   async signUp(fullName, email, password) {
     try {
-      const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/api/user/signup`,
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user/signup`,
         { fullName, email, password }
       );
       if (response.status === 200) {
-        localStorage.setItem("user", JSON.stringify(email));
+        localStorage.setItem("user", JSON.stringify(response.data));
         return true;
       }
 
@@ -49,13 +48,39 @@ class AuthService {
     return !!this.getCurrentUser();
   }
   
-  async fetchProjects(email) {
+  async fetchProjects() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/projects`, {
-        params: { email }
-      });
+      const response = await axios.get(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/${authServiceInstance.getCurrentUser()}`);
       if (response.status === 200) {
-        console.log(response.data);
+        return response.data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error in fetching projects:", error);
+      return [];
+    }
+  }
+
+  async createProject(name, description, apiPrefix) {
+    try {
+      const ownerId = this.getCurrentUser()
+      const response = await axios.post(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/create-project`, {name, description, apiPrefix, ownerId});
+      if (response.status === 200) {
+        return response.data;
+      }
+
+      return [];
+    } catch (error) {
+      console.error("Error in creating project:", error);
+      return [];
+    }
+  }
+
+  async getProject(projectId) {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/project/${projectId}`);
+      if (response.status === 200) {
         return response.data;
       }
 
