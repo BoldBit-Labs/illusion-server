@@ -18,6 +18,8 @@ public class Project {
     private String id;
     private String name;
     private String description;
+    private String apiPrefix;
+
     @Field("owner_id")
     private String ownerId;
 

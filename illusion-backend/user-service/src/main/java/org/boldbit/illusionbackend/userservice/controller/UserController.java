@@ -5,6 +5,8 @@ import org.boldbit.illusionbackend.userservice.dto.SignInDTO;
 import org.boldbit.illusionbackend.userservice.model.User;
 import org.boldbit.illusionbackend.userservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -16,22 +18,30 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/signup")
-    private void signUp(@RequestBody User user) {
+    private  ResponseEntity<?> signUp(@RequestBody User user) {
         try {
-            userService.createUser(user);
+            String userId = userService.createUser(user);
+            if (userId != null) {
+                return ResponseEntity.ok().body(userId);
+            }
             log.info("Created user: {}", user);
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error("Error creating user: {}", e.getMessage());
         }
+        return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
     }
 
     @PostMapping("/signin")
-    private void signIn(@RequestBody SignInDTO signInDTO) {
+    private ResponseEntity<?> signIn(@RequestBody SignInDTO signInDTO) {
         try {
-            userService.signIn(signInDTO);
+            String userId = userService.signIn(signInDTO);
+            if (userId != null) {
+                return ResponseEntity.ok().body(userId);
+            }
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            log.error(e.getMessage());
         }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{id}")
@@ -41,6 +51,17 @@ public class UserController {
         } catch (Exception e){
             throw new RuntimeException(e);
         }
+    }
+
+    @PostMapping("/projects/{userId}")
+    private String addProjectId(@PathVariable String userId, @RequestBody String projectId) {
+        try {
+            userService.addProjectID(userId, projectId);
+            return projectId;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
+        return null;
     }
 }
 
