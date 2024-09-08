@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProjectNamePlate from './ProjectNamePlate';
 import authServiceInstance from '../../services/AuthService';
-import NewEndpointModal from './NewEndpointModal';
+import Form from './FormParent';
+// import NewEndpointModal from './NewEndpointModal';
 
 
 function Project() {
@@ -44,11 +45,12 @@ function Project() {
   return (
     <div className="pt-safe-top">
       <div className="pt-8 p-12">
-        <div className="w-2/5">
-          <ProjectNamePlate projectName={project.name} projectId={projectId} />
+        <div className="w-fit">
+          <ProjectNamePlate projectName={project.name} projectId={projectId} apiPrefix={project.apiPrefix}/>
         </div>
 
-        <NewEndpointModal />
+        <Form />
+        {/* <NewEndpointModal /> */}
       </div>
     </div>
   );

@@ -4,22 +4,22 @@ import Checkbox from '../../components/Checkbox';
 import Text from '../../components/Text';
 import Label from "../../components/Label";
 import Input from "../../components/Input";
+import Schema from './Schema';
 
 const NewEndpointModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [url, setUrl] = useState("");
-  const [body, setBody] = useState("");
-  const [methods, setMethods] = useState({ GET: false, POST: false, PUT: false, DELETE: false });
+  const [methods, setMethods] = useState({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     let tempErrors = {};
     if (!name) tempErrors.name = "Name is required";
     if (!description) tempErrors.description = "Description is required";
-    if (!url) tempErrors.url = "URL is required";
-    if (!Object.values(methods).includes(true)) tempErrors.methods = "Select at least one method";
+    if (!methods.GET && !methods.POST && !methods.PUT && !methods.DELETE) {
+      tempErrors.methods = "Select at least one method";
+    }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
@@ -28,7 +28,7 @@ const NewEndpointModal = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validateForm()) {
-      const data = { name, description, url, body, methods };
+      const data = { name, description, methods };
       console.log("Form Data:", data);
       setIsModalOpen(false);
     }
@@ -36,6 +36,14 @@ const NewEndpointModal = () => {
 
   const handleCheckboxChange = (method) => {
     setMethods({ ...methods, [method]: !methods[method] });
+  };
+
+  const nameRegex = /^[a-zA-Z0-9-]*$/;
+  const handleNameChange = (e) => {
+    const value = e.target.value;
+    if (nameRegex.test(value)) {
+      setName(value);
+    }
   };
 
   return (
@@ -48,37 +56,58 @@ const NewEndpointModal = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="relative bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[calc(100vh-4rem)] overflow-y-auto p-8">
 
-            <button  onClick={() => setIsModalOpen(false)} className="absolute top-2 right-4 text-gray-400 hover:text-red-500 hover:scale-150 duration-200">
-              &times;
-            </button>
             <Text tag='h2' size='xl' weight='bold' className={"mb-6"}>Create Endpoint</Text>
+            <button onClick={() => setIsModalOpen(false)} className="absolute top-2 right-4 text-3xl text-gray-400 hover:text-red-500 hover:scale-150 duration-200">&times;</button>
 
             <form onSubmit={handleSubmit} noValidate>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Enter endpoint name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 mb-3" />
+              <Input id="name" placeholder="Enter endpoint name" value={name} onChange={handleNameChange} className="mt-1 mb-3" />
               {errors.name && <Text tag='p' className="text-red-500">{errors.name}</Text>}
-              
+
               <Label htmlFor="description" className="mt-4">Description</Label>
               <Input id="description" placeholder="Enter endpoint description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 mb-3" />
               {errors.description && <Text tag='p' className="text-red-500">{errors.description}</Text>}
 
-              <Label htmlFor="url" className="mt-4">URL</Label>
-              <Input id="url" placeholder="Enter endpoint URL" value={url} onChange={(e) => setUrl(e.target.value)} className="mt-1 mb-3" />
-              {errors.url && <Text tag='p' className="text-red-500">{errors.url}</Text>}
+              <Schema />
 
-              <Label htmlFor="methods" className="mt-4">HTTP Methods</Label>
-              <div className='mb-3'>
-                {["GET", "POST", "PUT", "DELETE"].map((method) => (
-                  <div key={method} className="flex items-center mt-3">
-                    <Checkbox id={method.toLowerCase()} checked={methods[method]} onChange={() => handleCheckboxChange(method)} />
-                    <Label htmlFor={method.toLowerCase()} className="font-medium ml-2">{method}</Label>
-                  </div>
-                ))}
+              <div className='mt-6'>
+                <div className='flex items-center'>
+                  <Checkbox id={"get"} checked={methods.GET} onChange={() => handleCheckboxChange("GET")} />
+                  <Label htmlFor="get" className={"font-medium ml-4"}>
+                    GET
+                    <Text className={"text-blue-400 ml-2"}>/{name}</Text>
+                  </Label>
+                </div>
+
+                <div className='flex items-center mt-4'>
+                  <Checkbox id={"getid"} checked={methods.GETID} onChange={() => handleCheckboxChange("GETID")} />
+                  <Label htmlFor="getid" className={"font-medium ml-4"}>
+                    GET <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
+                  </Label>
+                </div>
+
+                <div className='flex items-center mt-4'>
+                  <Checkbox id={"post"} checked={methods.POST} onChange={() => handleCheckboxChange("POST")} />
+                  <Label htmlFor="post" className={"font-medium ml-4"}>
+                    POST  <Text className="text-blue-400 ml-2">/{name}</Text>
+                  </Label>
+                </div>
+
+                <div className='flex items-center mt-4'>
+                  <Checkbox id={"put"} checked={methods.PUT} onChange={() => handleCheckboxChange("PUT")} />
+                  <Label htmlFor="put" className={"font-medium ml-4"}>
+                    PUT <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
+                  </Label>
+                </div>
+
+                <div className='flex items-center my-4'>
+                  <Checkbox id={"delete"} checked={methods.DELETE} onChange={() => handleCheckboxChange("DELETE")} />
+                  <Label htmlFor="delete" className={"font-medium ml-4"}>
+                    DELETE <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
+                  </Label>
+                </div>
+                {errors.methods && <Text tag='p' className="text-red-500 mb-2">{errors.methods}</Text>}
               </div>
-              {errors.methods && <Text tag='p' className="text-red-500 mb-2">{errors.methods}</Text>}
-
-              <Label htmlFor="body" className="mt-4">Body</Label>
-              <Input id="body" placeholder="Enter endpoint body (optional)" value={body} onChange={(e) => setBody(e.target.value)} className="mt-1 mb-6" />
 
               <Button type="submit" text="Create Endpoint" />
             </form>
