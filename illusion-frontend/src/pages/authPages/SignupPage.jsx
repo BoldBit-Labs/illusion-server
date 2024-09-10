@@ -48,7 +48,7 @@ function SignupPage() {
           </div>
 
           <div className="mt-6 flex justify-between items-center">
-            <Button text="Sign Up" />
+            <Button type="submit" text="Sign Up" />
             <Text size="small" className={"flex "} >
               Already have an account?
               <Text tag="p" className={"cursor-pointer text-blue-500 hover:scale-125 duration-200 pl-2"} onClick={() => navigate('/signin')}>Sign In</Text>

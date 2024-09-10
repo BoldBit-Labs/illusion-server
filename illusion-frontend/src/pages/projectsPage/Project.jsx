@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import ProjectNamePlate from './ProjectNamePlate';
 import authServiceInstance from '../../services/AuthService';
-import Form from './FormParent';
-// import NewEndpointModal from './NewEndpointModal';
+import NewEndpointModal from './NewEndpointModal';
 
 
 function Project() {
@@ -49,8 +48,7 @@ function Project() {
           <ProjectNamePlate projectName={project.name} projectId={projectId} apiPrefix={project.apiPrefix}/>
         </div>
 
-        <Form />
-        {/* <NewEndpointModal /> */}
+        <NewEndpointModal />
       </div>
     </div>
   );

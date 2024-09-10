@@ -33,7 +33,7 @@ function SigninPage() {
           <Input id="password" type="password" placeholder="********" value={password} onChange={(e) => setPassword(e.target.value)} className="mt-2" />
 
           <div className="mt-6 flex justify-between items-center">
-            <Button text="Sign In" />
+            <Button type="submit" text="Sign In" />
             <div>
               <Text size="small" className={"flex "} >
                 Create account?
