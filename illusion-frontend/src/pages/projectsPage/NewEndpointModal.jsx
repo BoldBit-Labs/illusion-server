@@ -10,6 +10,7 @@ const NewEndpointModal = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [schema, setSchema] = useState({});
   const [methods, setMethods] = useState({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
   const [errors, setErrors] = useState({});
 
@@ -17,7 +18,7 @@ const NewEndpointModal = () => {
     let tempErrors = {};
     if (!name) tempErrors.name = "Name is required";
     if (!description) tempErrors.description = "Description is required";
-    if (!methods.GET && !methods.POST && !methods.PUT && !methods.DELETE) {
+    if (!methods.GET && !methods.GETID && !methods.POST && !methods.PUT && !methods.DELETE) {
       tempErrors.methods = "Select at least one method";
     }
 
@@ -27,23 +28,35 @@ const NewEndpointModal = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    
     if (validateForm()) {
-      const data = { name, description, methods };
+      const data = { name, description, schema, methods };
       console.log("Form Data:", data);
-      setIsModalOpen(false);
+      
+      setName("");
+      setDescription(""); 
+      setMethods({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
+      setSchema({});
+
+      setIsModalOpen(false);  
     }
   };
+  
 
   const handleCheckboxChange = (method) => {
     setMethods({ ...methods, [method]: !methods[method] });
   };
 
-  const nameRegex = /^[a-zA-Z0-9-]*$/;
   const handleNameChange = (e) => {
     const value = e.target.value;
-    if (nameRegex.test(value)) {
+    if (validatePath(value)) {
       setName(value);
     }
+  };
+
+  const validatePath = (path) => {
+    const pathRegex = /^\/([a-zA-Z0-9-]+(\/[a-zA-Z0-9-]+)*)?\/?$/;
+    return pathRegex.test(path);
   };
 
   return (
@@ -57,18 +70,20 @@ const NewEndpointModal = () => {
           <div className="relative bg-white rounded-lg shadow-lg w-full max-w-3xl max-h-[calc(100vh-4rem)] overflow-y-auto p-8">
 
             <Text tag='h2' size='xl' weight='bold' className={"mb-6"}>Create Endpoint</Text>
-            <button onClick={() => setIsModalOpen(false)} className="absolute top-2 right-4 text-3xl text-gray-400 hover:text-red-500 hover:scale-150 duration-200">&times;</button>
+            <button type="button" onClick={() => setIsModalOpen(false)} className="absolute top-2 right-4 text-3xl text-gray-400 hover:text-red-500 hover:scale-150 duration-200">
+              &times;
+            </button>
 
             <form onSubmit={handleSubmit} noValidate>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Enter endpoint name" value={name} onChange={handleNameChange} className="mt-1 mb-3" />
+              <Input id="name" placeholder="/users" value={name} onChange={handleNameChange} className="mt-1 mb-3" />
               {errors.name && <Text tag='p' className="text-red-500">{errors.name}</Text>}
 
               <Label htmlFor="description" className="mt-4">Description</Label>
               <Input id="description" placeholder="Enter endpoint description" value={description} onChange={(e) => setDescription(e.target.value)} className="mt-1 mb-3" />
               {errors.description && <Text tag='p' className="text-red-500">{errors.description}</Text>}
 
-              <Schema />
+              <Schema setSchema={setSchema} />
 
               <div className='mt-6'>
                 <div className='flex items-center'>

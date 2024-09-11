@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import FieldRow from './FieldRow';
 import SlideButton from '../../components/SlideButton';
 import { FaPlus } from "react-icons/fa6";
@@ -6,7 +6,7 @@ import Text from '../../components/Text';
 import Input from '../../components/Input';
 import Dropdown from '../../components/Dropdown';
 
-function Schema() {
+const Schema = ({ setSchema }) => {
     const [schemaFields, setSchemaFields] = useState([{ name: 'id', type: 'String', depth: 0, isMandatory: true, isDisabled: true }]);
     const fieldTypes = ["String", "Number", "Float", "Boolean", "Date", "Array", "Object"];
 
@@ -44,7 +44,7 @@ function Schema() {
         setSchemaFields(updatedFields);
     };
 
-    const buildNestedSchema = (fields, depth = 0) => {
+    const buildNestedSchema = useCallback((fields, depth = 0) => {
         const nestedSchema = {};
 
         for (let i = 0; i < fields.length; i++) {
@@ -61,12 +61,17 @@ function Schema() {
         }
 
         return nestedSchema;
-    };
+    }, []); // Empty dependency array means buildNestedSchema is stable
+
+    useEffect(() => {
+        const schema = buildNestedSchema(schemaFields);
+        setSchema(schema);
+    }, [schemaFields, buildNestedSchema, setSchema]);
 
     return (
         <div>
             <Text>Schema</Text>
-            <div className='p-4 rounded-2xl border-gray-400 border-2'>
+            <div className='p-4 rounded-2xl border-gray-200 border-2'>
 
                 <div className='flex'>
                     <div className='flex flex-2'>

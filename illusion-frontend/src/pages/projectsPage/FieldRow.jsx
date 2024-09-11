@@ -11,9 +11,9 @@ function FieldRow({ field, index, schemaFields, fieldTypes, handleFieldChange, r
             <Dropdown id={`type-${index}`} name="type" options={fieldTypes} className="ml-4" value={field.type} onChange={(e) => handleFieldChange(index, 'type', e.target.value)} />
 
             <div className="flex-1">
-                {schemaFields.length > 1 && (<button onClick={() => removeCurrentFieldRow(index)} className="ml-4 text-red-500 text-4xl hover:scale-150 duration-200">&times;</button>)}
+                {schemaFields.length > 1 && (<button type='button' onClick={() => removeCurrentFieldRow(index)} className="ml-4 text-red-500 text-4xl hover:scale-150 duration-200">&times;</button>)}
 
-                {field.type === "Object" && (<button onClick={() => addNewFieldRow(index)} className="ml-4 text-blue-500 text-4xl hover:scale-150 duration-200"> + </button>)}
+                {field.type === "Object" && (<button type='button' onClick={() => addNewFieldRow(index)} className="ml-4 text-blue-500 text-4xl hover:scale-150 duration-200"> + </button>)}
             </div>
 
             {/* Render nested fields if the current field is an Object */}
