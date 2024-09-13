@@ -7,5 +7,5 @@ public interface UserService {
     String createUser(User user);
     String signIn(SignInDTO signInDTO);
     User getUser(String id);
-    void addProjectID(String userId, String projectId);
+    String addProjectID(String userId, String projectId);
 }

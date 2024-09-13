@@ -90,6 +90,33 @@ class AuthService {
       return [];
     }
   }
+
+  async createEndpoint(postData) {
+    console.log("api data: ", postData);
+    
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_PS_BASE_URL}/api/endpoints/create-endpoint`, 
+        {
+          projectId: postData.projectId,
+          name: postData.name,
+          description: postData.description,
+          schema: postData.schema,
+          allowedMethods: postData.allowedMethods
+        }
+      );
+  
+      if (response.status === 200) {
+        return response.data;
+      }
+  
+      return null;
+    } catch (error) {
+      console.error("Error in creating Endpoint:", error);
+      return null;
+    }
+  }
+  
 }
 
 const authServiceInstance = new AuthService();

@@ -1,4 +1,4 @@
-package org.boldbit.illusionbackend.userservice.config;
+package org.boldbit.illusionbackend.apigeneratorservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

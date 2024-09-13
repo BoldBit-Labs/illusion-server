@@ -48,7 +48,7 @@ function Project() {
           <ProjectNamePlate projectName={project.name} projectId={projectId} apiPrefix={project.apiPrefix}/>
         </div>
 
-        <NewEndpointModal />
+        <NewEndpointModal projectInfo={projectId} />
       </div>
     </div>
   );

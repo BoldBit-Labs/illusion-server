@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void addProjectID(String userId, String projectId) {
+    public String addProjectID(String userId, String projectId) {
         User user = userRepository.findById(userId).orElse(null);
 
         assert user != null;
@@ -52,9 +52,12 @@ public class UserServiceImpl implements UserService {
             user.setProjectIds(projectIds);
         }
 
+        // FIXME:
         if (!projectIds.contains(projectId)) {
             projectIds.add(projectId);
             userRepository.save(user);
+            return projectId;
         }
+        return null;
     }
 }

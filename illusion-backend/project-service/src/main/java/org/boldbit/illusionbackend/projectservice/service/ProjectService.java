@@ -12,6 +12,5 @@ public interface ProjectService {
     Optional<Project> findProjectByOwnerIdAndProjectName(String ownerId, String projectName);
     Project getProject(String projectId);
     List<Project> getAllProjects(String ownerId);
-//    void updateProject(String projectId);
-//    void deleteProject(String projectId);
+    String addEndpointId(String projectId, String endpointId);
 }

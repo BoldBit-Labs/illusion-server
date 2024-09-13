@@ -5,46 +5,52 @@ import Text from '../../components/Text';
 import Label from "../../components/Label";
 import Input from "../../components/Input";
 import Schema from './Schema';
+import authServiceInstance from '../../services/AuthService';
 
-const NewEndpointModal = () => {
+const NewEndpointModal = (projectInfo) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const projectId = projectInfo.projectInfo;
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [schema, setSchema] = useState({});
-  const [methods, setMethods] = useState({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
+  const [allowedMethods, setAllowedMethods] = useState({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     let tempErrors = {};
     if (!name) tempErrors.name = "Name is required";
     if (!description) tempErrors.description = "Description is required";
-    if (!methods.GET && !methods.GETID && !methods.POST && !methods.PUT && !methods.DELETE) {
-      tempErrors.methods = "Select at least one method";
+    if (!allowedMethods.GET && !allowedMethods.GETID && !allowedMethods.POST && !allowedMethods.PUT && !allowedMethods.DELETE) {
+      tempErrors.allowedMethods = "Select at least one method";
     }
 
     setErrors(tempErrors);
     return Object.keys(tempErrors).length === 0;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    if (validateForm()) {
-      const data = { name, description, schema, methods };
-      console.log("Form Data:", data);
-      
-      setName("");
-      setDescription(""); 
-      setMethods({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
-      setSchema({});
 
-      setIsModalOpen(false);  
+    if (validateForm()) {
+      const data = { projectId, name, description, schema, allowedMethods };
+      console.log("Form Data:", data);
+      const success = await authServiceInstance.createEndpoint(data);
+      if (success !== null) {
+        setIsModalOpen(false);
+        console.log("sucess............");
+
+        setName("");
+        setDescription("");
+        setAllowedMethods({ GET: false, GETID: false, POST: false, PUT: false, DELETE: false });
+        setSchema({});
+      } else {
+        alert("Error in creating project");
+      }
     }
   };
-  
 
   const handleCheckboxChange = (method) => {
-    setMethods({ ...methods, [method]: !methods[method] });
+    setAllowedMethods({ ...allowedMethods, [method]: !allowedMethods[method] });
   };
 
   const handleNameChange = (e) => {
@@ -87,7 +93,7 @@ const NewEndpointModal = () => {
 
               <div className='mt-6'>
                 <div className='flex items-center'>
-                  <Checkbox id={"get"} checked={methods.GET} onChange={() => handleCheckboxChange("GET")} />
+                  <Checkbox id={"get"} checked={allowedMethods.GET} onChange={() => handleCheckboxChange("GET")} />
                   <Label htmlFor="get" className={"font-medium ml-4"}>
                     GET
                     <Text className={"text-blue-400 ml-2"}>/{name}</Text>
@@ -95,33 +101,33 @@ const NewEndpointModal = () => {
                 </div>
 
                 <div className='flex items-center mt-4'>
-                  <Checkbox id={"getid"} checked={methods.GETID} onChange={() => handleCheckboxChange("GETID")} />
+                  <Checkbox id={"getid"} checked={allowedMethods.GETID} onChange={() => handleCheckboxChange("GETID")} />
                   <Label htmlFor="getid" className={"font-medium ml-4"}>
                     GET <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
                   </Label>
                 </div>
 
                 <div className='flex items-center mt-4'>
-                  <Checkbox id={"post"} checked={methods.POST} onChange={() => handleCheckboxChange("POST")} />
+                  <Checkbox id={"post"} checked={allowedMethods.POST} onChange={() => handleCheckboxChange("POST")} />
                   <Label htmlFor="post" className={"font-medium ml-4"}>
                     POST  <Text className="text-blue-400 ml-2">/{name}</Text>
                   </Label>
                 </div>
 
                 <div className='flex items-center mt-4'>
-                  <Checkbox id={"put"} checked={methods.PUT} onChange={() => handleCheckboxChange("PUT")} />
+                  <Checkbox id={"put"} checked={allowedMethods.PUT} onChange={() => handleCheckboxChange("PUT")} />
                   <Label htmlFor="put" className={"font-medium ml-4"}>
                     PUT <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
                   </Label>
                 </div>
 
                 <div className='flex items-center my-4'>
-                  <Checkbox id={"delete"} checked={methods.DELETE} onChange={() => handleCheckboxChange("DELETE")} />
+                  <Checkbox id={"delete"} checked={allowedMethods.DELETE} onChange={() => handleCheckboxChange("DELETE")} />
                   <Label htmlFor="delete" className={"font-medium ml-4"}>
                     DELETE <Text className="text-blue-400 ml-2">{name ? `/${name}/:id` : '/:id'}</Text>
                   </Label>
                 </div>
-                {errors.methods && <Text tag='p' className="text-red-500 mb-2">{errors.methods}</Text>}
+                {errors.allowedMethods && <Text tag='p' className="text-red-500 mb-2">{errors.allowedMethods}</Text>}
               </div>
 
               <Button type="submit" text="Create Endpoint" />
