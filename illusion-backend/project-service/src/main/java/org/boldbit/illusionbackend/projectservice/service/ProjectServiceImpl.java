@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,5 +50,26 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public List<Project> getAllProjects(String ownerId) {
         return projectRepository.findAllByOwnerId(ownerId);
+    }
+
+    @Override
+    @Transactional
+    public String addEndpointId(String projectId, String endpointId) {
+        Project project = projectRepository.findById(projectId).orElse(null);
+
+        assert project != null;
+        List<String> endpointIds = project.getEndpointIds();
+        if (endpointIds == null) {
+            endpointIds = new ArrayList<>();
+            project.setEndpointIds(endpointIds);
+        }
+
+        // FIXME:
+        if (!endpointIds.contains(endpointId)) {
+            endpointIds.add(endpointId);
+            projectRepository.save(project);
+            return endpointId;
+        }
+        return null;
     }
 }

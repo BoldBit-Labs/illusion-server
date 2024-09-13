@@ -56,8 +56,7 @@ public class UserController {
     @PostMapping("/projects/{userId}")
     private String addProjectId(@PathVariable String userId, @RequestBody String projectId) {
         try {
-            userService.addProjectID(userId, projectId);
-            return projectId;
+            return userService.addProjectID(userId, projectId);
         } catch (Exception e) {
             log.error(e.getMessage());
         }

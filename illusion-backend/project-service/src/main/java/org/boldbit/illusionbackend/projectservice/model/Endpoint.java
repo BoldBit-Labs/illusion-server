@@ -7,22 +7,28 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import java.util.List;
+import java.util.Map;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "projects")
-public class Project {
+@Document(collection = "endpoints")
+public class Endpoint {
+
     @Id
     private String id;
+
+    @Field("project_id")
+    private String projectId;
+
     private String name;
+
     private String description;
-    private String endpointPrefix;
 
-    @Field("owner_id")
-    private String ownerId;
+    @Field("allowed_methods")
+    private Map<String, Boolean> allowedMethods;
 
-    @Field("api_ids")
-    private List<String> endpointIds;
+    @Field("schema")
+    private Map<String, Object> schema;
+
 }
