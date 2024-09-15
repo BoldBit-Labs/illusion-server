@@ -1,0 +1,41 @@
+services:
+  # MongoDB Service
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/data/db  # Persist MongoDB data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - microservices-net
+
+  # Mongo Express Service
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: mongo_user
+      ME_CONFIG_BASICAUTH_PASSWORD: mongo_pass
+    networks:
+      - microservices-net
+
+networks:
+  microservices-net:
+    driver: bridge
+
+volumes:
+  mongo:
+    driver: local
