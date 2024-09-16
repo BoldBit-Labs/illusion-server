@@ -1,8 +1,8 @@
 package org.boldbit.illusionbackend.apigeneratorservice.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import org.boldbit.illusionbackend.apigeneratorservice.service.APIGeneratorService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,14 +10,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/")
+@RequiredArgsConstructor
 public class APIGeneratorController {
-
     private final APIGeneratorService apiGeneratorService;
-
-    public APIGeneratorController(APIGeneratorService apiGeneratorService) {
-        this.apiGeneratorService = apiGeneratorService;
-    }
-
 
     @RequestMapping(value = "/{endpoint}", method = RequestMethod.GET)
     public Map<String, Object> handleGetRequest(@PathVariable String endpoint,

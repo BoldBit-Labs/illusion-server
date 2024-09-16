@@ -10,5 +10,6 @@ import java.util.Optional;
 @Repository
 public interface ProjectRepository extends MongoRepository<Project, String> {
     Optional<Project> findByOwnerIdAndName(String ownerId, String name);
+
     List<Project> findAllByOwnerId(String ownerId);
 }

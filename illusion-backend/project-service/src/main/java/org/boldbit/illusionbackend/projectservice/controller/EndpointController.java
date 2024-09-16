@@ -1,37 +1,52 @@
 package org.boldbit.illusionbackend.projectservice.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import org.boldbit.illusionbackend.projectservice.model.Endpoint;
 import org.boldbit.illusionbackend.projectservice.service.EndpointService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/endpoints")
 public class EndpointController {
-    private static final Logger log = LoggerFactory.getLogger(EndpointController.class);
     private final EndpointService endpointService;
-
-    public EndpointController(EndpointService endpointService) {
-        this.endpointService = endpointService;
-    }
 
     @PostMapping("/create-endpoint")
     private ResponseEntity<?> createEndpoint(@RequestBody Endpoint endpoint) {
-        try {
-            String endpointId = endpointService.createEndpoint(endpoint);
-            if (endpointId != null) {
-                return ResponseEntity.ok().body(endpointId);
-            }
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return ResponseEntity.badRequest().body(null);
+        String endpointId = endpointService.createEndpoint(endpoint);
+        return ResponseEntity.ok(endpointId);
     }
 
+    @GetMapping("/endpoint/{endpointId}")
+    public ResponseEntity<Endpoint> getEndpointById(@PathVariable String endpointId) {
+        Endpoint endpoint = endpointService.getEndpoint(endpointId);
+        return ResponseEntity.ok(endpoint);
+    }
+
+    @GetMapping("/{projectId}")
+    public ResponseEntity<List<Endpoint>> getAllEndpoints(@PathVariable String projectId) {
+        List<Endpoint> endpoints = endpointService.getAllEndpoints(projectId);
+        return ResponseEntity.ok(endpoints);
+    }
+
+    @PatchMapping("/{endpointId}")
+    public ResponseEntity<?> updateEndpoint(@PathVariable String endpointId, @RequestBody Map<String, Object> updates) {
+        Endpoint updatedEndpoint = endpointService.updateEndpoint(endpointId, updates);
+        return ResponseEntity.ok(updatedEndpoint);
+    }
+
+    @DeleteMapping("/{endpointId}")
+    public ResponseEntity<String> deleteEndpoint(@PathVariable String endpointId) {
+        boolean deleted = endpointService.deleteEndpoint(endpointId);
+        if (deleted) {
+            return ResponseEntity.ok("Endpoint deleted successfully");
+        }
+        return new ResponseEntity<>("Endpoint not found", HttpStatus.NOT_FOUND);
+    }
 }

@@ -3,10 +3,11 @@ package org.boldbit.illusionbackend.userservice.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.Instant;
 import java.util.List;
@@ -24,13 +25,20 @@ public class User {
     @Indexed(unique = true)
     private String email;
     private String password;
+    private List<Project> projects;
 
-    @Field("project_ids")
-    private List<String> projectIds;
+    @CreatedDate
+    private Instant createdDate;
 
-    @Field("created_at")
-    private Instant createdAt;
+    @LastModifiedDate
+    private Instant lastModifiedDate;
 
-    @Field("updated_at")
-    private Instant updatedAt;
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Project {
+        // Fixme: projectId -> id
+        private String projectId;
+        private String projectName;
+    }
 }
