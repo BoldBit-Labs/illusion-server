@@ -1,0 +1,33 @@
+server:
+  port: 8893
+
+spring:
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/api/user/**
+
+        - id: project-service-api-projects
+          uri: lb://PROJECT-SERVICE
+          predicates:
+            - Path=/api/projects/**
+
+        - id: project-service-api-endpoints
+          uri: lb://PROJECT-SERVICE
+          predicates:
+            - Path=/api/endpoints/**
+
+        - id: api-generator-service
+          uri: lb://API-GENERATOR-SERVICE
+          predicates:
+            - Path=/**
+
+# logging:
+#   level:
+#     org.springframework.cloud.gateway: DEBUG

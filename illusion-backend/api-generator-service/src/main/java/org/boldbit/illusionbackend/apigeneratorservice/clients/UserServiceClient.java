@@ -7,6 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @FeignClient(name = "user-service", url = "http://localhost:8890")
 public interface UserServiceClient {
-    @PostMapping("/api/user/projects/{userId}")
-    String addProjectId(@PathVariable String userId, @RequestBody String projectId);
+//    @PostMapping("/api/user/projects/{userId}")
+//    String addProjectId(@PathVariable String userId, @RequestBody String projectId);
 }
