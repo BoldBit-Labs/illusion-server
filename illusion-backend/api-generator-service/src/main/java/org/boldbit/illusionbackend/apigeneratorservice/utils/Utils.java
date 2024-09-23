@@ -5,7 +5,7 @@ import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceCli
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.BodyMismatchException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
-import org.boldbit.illusionbackend.apigeneratorservice.model.API;
+import org.boldbit.illusionbackend.apigeneratorservice.model.RequestObject;
 import org.boldbit.illusionbackend.apigeneratorservice.model.DataModelsRegistry;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Endpoint;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Project;
@@ -95,11 +95,11 @@ public class Utils {
         return collectionId;
     }
 
-    public String[] pathVariableFinder(String projectId, String path, API.HttpMethod httpMethod) {
+    public String[] pathVariableFinder(String projectId, String path, RequestObject.HttpMethod httpMethod) {
         String[] data = new String[2];
         String[] paths = paths(path);
         data[1] = paths[3];
-        if (httpMethod.equals(API.HttpMethod.GET)) {
+        if (httpMethod.equals(RequestObject.HttpMethod.GET)) {
             try {
                 validAPIRequest(projectId, paths[0], httpMethod.toString());
                 data[0] = paths[0];
@@ -120,14 +120,14 @@ public class Utils {
                     return data;
                 }
             }
-        } else if (httpMethod.equals(API.HttpMethod.POST)) {
+        } else if (httpMethod.equals(RequestObject.HttpMethod.POST)) {
             validAPIRequest(projectId, paths[0], httpMethod.toString());
             data[0] = paths[0];
             data[1] = null;
             return data;
-        } else if (httpMethod.equals(API.HttpMethod.PUT) ||
-                httpMethod.equals(API.HttpMethod.PATCH) ||
-                httpMethod.equals(API.HttpMethod.DELETE)) {
+        } else if (httpMethod.equals(RequestObject.HttpMethod.PUT) ||
+                httpMethod.equals(RequestObject.HttpMethod.PATCH) ||
+                httpMethod.equals(RequestObject.HttpMethod.DELETE)) {
             try {
                 validAPIRequest(projectId, paths[1], httpMethod.toString());
                 data[0] = paths[1];

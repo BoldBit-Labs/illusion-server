@@ -9,7 +9,7 @@ import java.util.Map;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class API {
+public class RequestObject {
     private Scheme scheme;
     private Authority authority;
     private String path; // Path segments, e.g., /api/v1/users

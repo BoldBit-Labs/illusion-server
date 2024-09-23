@@ -36,24 +36,24 @@ public class APIGeneratorService {
                                          Map<String, Object> allQueryParams,
                                          HttpServletRequest httpServletRequest) {
 
-        API api = fillAPIObject(pathVariable, requestBody, allQueryParams, httpServletRequest);
-        Endpoint endpoint = utils.validAPIRequest(api.getAuthority().getSubdomain(),
-                api.getPath(),
-                String.valueOf(api.getHttpMethod()));
+        RequestObject requestObject = fillRequestObject(pathVariable, requestBody, allQueryParams, httpServletRequest);
+        Endpoint endpoint = utils.validAPIRequest(requestObject.getAuthority().getSubdomain(),
+                requestObject.getPath(),
+                String.valueOf(requestObject.getHttpMethod()));
 
         Map<String, Object> schema = endpoint.schema();
 
         String collectionId = endpoint.collectionId();
         if (collectionId == null) {
-            collectionId = utils.createCollection(api.getEndpoint(), endpoint.id());
+            collectionId = utils.createCollection(requestObject.getEndpoint(), endpoint.id());
         }
 
-        return switch (api.getHttpMethod()) {
-            case GET -> getRequestService.handleGetRequest(collectionId, api.getPathVariable());
-            case POST -> postRequestService.handlePostRequest(collectionId, schema, api.getBody());
-            case PUT -> putRequestService.handlePutRequest(collectionId, api.getPathVariable(), schema, api.getBody());
-            case PATCH -> patchRequestService.handlePatchRequest(collectionId, api.getPathVariable(), schema, api.getBody());
-            case DELETE -> deleteRequestService.handleDeleteRequest(collectionId, api.getPathVariable());
+        return switch (requestObject.getHttpMethod()) {
+            case GET -> getRequestService.handleGetRequest(collectionId, requestObject.getPathVariable());
+            case POST -> postRequestService.handlePostRequest(collectionId, schema, requestObject.getBody());
+            case PUT -> putRequestService.handlePutRequest(collectionId, requestObject.getPathVariable(), schema, requestObject.getBody());
+            case PATCH -> patchRequestService.handlePatchRequest(collectionId, requestObject.getPathVariable(), schema, requestObject.getBody());
+            case DELETE -> deleteRequestService.handleDeleteRequest(collectionId, requestObject.getPathVariable());
             default -> ResponseEntity.ok(handleUnknownRequest());
         };
     }
@@ -62,37 +62,37 @@ public class APIGeneratorService {
         return null;
     }
 
-    private API fillAPIObject(String pathVariable,
-                        Map<String, Object> requestBody,
-                        Map<String, Object> allQueryParams,
-                        HttpServletRequest httpServletRequest) {
-        API api = new API();
+    private RequestObject fillRequestObject(String pathVariable,
+                                        Map<String, Object> requestBody,
+                                        Map<String, Object> allQueryParams,
+                                        HttpServletRequest httpServletRequest) {
+        RequestObject requestObject = new RequestObject();
         try {
-            api.setHttpMethod(API.HttpMethod.valueOf(httpServletRequest.getMethod()));
-            api.setScheme(API.Scheme.valueOf(httpServletRequest.getScheme().toUpperCase()));
+            requestObject.setHttpMethod(RequestObject.HttpMethod.valueOf(httpServletRequest.getMethod()));
+            requestObject.setScheme(RequestObject.Scheme.valueOf(httpServletRequest.getScheme().toUpperCase()));
 
             String host = httpServletRequest.getHeader("x-forwarded-host");
-            API.Authority authority = new API.Authority();
+            RequestObject.Authority authority = new RequestObject.Authority();
             authority.setSubdomain(host.split("\\.")[0]);
             authority.setDomain(host.split("\\.")[1]);
             authority.setExtension(host.split("\\.")[2].split(":")[0]);
             authority.setPort(Integer.parseInt(host.split("\\.")[2].split(":")[1]));
             authority.setHost(host);
-            api.setAuthority(authority);
+            requestObject.setAuthority(authority);
 
-            api.setPath(httpServletRequest.getRequestURI());
-            String[] endpoints = api.getPath().split("/");
+            requestObject.setPath(httpServletRequest.getRequestURI());
+            String[] endpoints = requestObject.getPath().split("/");
             if (endpoints.length > 1) {
-                api.setEndpoint(endpoints[endpoints.length - 1]);
+                requestObject.setEndpoint(endpoints[endpoints.length - 1]);
             }
 
-            String[] pathVariableFinder = utils.pathVariableFinder(authority.getSubdomain(), api.getPath(), api.getHttpMethod());
-            api.setPath(pathVariableFinder[0]);
-            api.setPathVariable(pathVariableFinder[1]);
+            String[] pathVariableFinder = utils.pathVariableFinder(authority.getSubdomain(), requestObject.getPath(), requestObject.getHttpMethod());
+            requestObject.setPath(pathVariableFinder[0]);
+            requestObject.setPathVariable(pathVariableFinder[1]);
 
-            api.setQueryParameters(allQueryParams);
-            api.setFragment(httpServletRequest.getHeader("fragment"));
-            api.setBody(requestBody);
+            requestObject.setQueryParameters(allQueryParams);
+            requestObject.setFragment(httpServletRequest.getHeader("fragment"));
+            requestObject.setBody(requestBody);
         } catch (MethodNotAllowedException e) {
             throw new MethodNotAllowedException(e.getMessage());
         } catch (NoMatchingEndpointFound e) {
@@ -100,6 +100,6 @@ public class APIGeneratorService {
         } catch (Exception e) {
             throw new NotFoundException(e);
         }
-        return api;
+        return requestObject;
     }
 }
