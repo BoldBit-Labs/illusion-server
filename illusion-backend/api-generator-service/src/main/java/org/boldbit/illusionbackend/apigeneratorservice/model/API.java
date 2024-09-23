@@ -12,7 +12,8 @@ import java.util.Map;
 public class API {
     private Scheme scheme;
     private Authority authority;
-    private String path; // Path segments, e.g., ["api", "v1", "users"]
+    private String path; // Path segments, e.g., /api/v1/users
+    private String endpoint; // Path segments, e.g., users
     private String pathVariable; // Path variables, e.g., {"userId": "123"}
     private Map<String, Object> queryParameters; // Query parameters, e.g., {"filter": "active", "sort": "asc"}
     private String fragment; // Fragment identifier, e.g., "#section2"

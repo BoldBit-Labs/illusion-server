@@ -41,6 +41,12 @@ public class EndpointController {
         return ResponseEntity.ok(updatedEndpoint);
     }
 
+    @PutMapping("/{endpointId}")
+    public ResponseEntity<?> updateEndpointPartially(@PathVariable String endpointId, @RequestBody Map<String, Object> updates) {
+        Endpoint updatedEndpoint = endpointService.updateEndpoint(endpointId, updates);
+        return ResponseEntity.ok(updatedEndpoint);
+    }
+
     @DeleteMapping("/{endpointId}")
     public ResponseEntity<String> deleteEndpoint(@PathVariable String endpointId) {
         boolean deleted = endpointService.deleteEndpoint(endpointId);

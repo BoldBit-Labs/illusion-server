@@ -25,6 +25,7 @@ public class Endpoint {
     private String projectId;
     private String url;
     private String description;
+    private String collectionId;
 
     @Field("allowed_methods")
     private Map<String, Boolean> allowedMethods;

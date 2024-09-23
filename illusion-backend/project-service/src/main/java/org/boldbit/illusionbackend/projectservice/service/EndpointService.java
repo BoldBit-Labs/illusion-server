@@ -64,6 +64,9 @@ public class EndpointService {
                 case "url":
                     endpoint.setUrl((String) value);
                     break;
+                case "collectionId":
+                    endpoint.setCollectionId((String) value);
+                    break;
                 case "description":
                     endpoint.setDescription((String) value);
                     break;
