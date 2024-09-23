@@ -1,7 +1,5 @@
 package org.boldbit.illusionbackend.apigeneratorservice.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -9,15 +7,13 @@ import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceCli
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
 import org.boldbit.illusionbackend.apigeneratorservice.model.*;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.APIDocumentsRegistryRepository;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.BigDBRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.utils.Utils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Map;
 
 @Service
@@ -26,8 +22,8 @@ import java.util.Map;
 public class APIGeneratorService {
 
     private final ProjectServiceClient projectServiceClient;
-    private final APIDocumentsRegistryRepository documentsRegistryRepository;
-    private final BigDBRepository bigDBRepository;
+    private final DataModelsRegistryRepository registryRepository;
+    private final DataModelRepository bigDBRepository;
     private final Utils utils;
     private final GetRequestService getRequestService;
     private final PostRequestService postRequestService;

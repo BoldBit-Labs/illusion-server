@@ -6,14 +6,17 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document("BigDB")
-public class BigDB {
+@Document("dataModelsRegistry")
+public class DataModelsRegistry {
+
     @Id
     private String id;
-    private Map<String, Object> object;
+    private String name;
+    private List<String> dataModelIds;
+
 }

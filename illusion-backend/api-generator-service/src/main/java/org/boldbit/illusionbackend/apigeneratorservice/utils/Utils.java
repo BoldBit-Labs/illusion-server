@@ -5,10 +5,10 @@ import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceCli
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
 import org.boldbit.illusionbackend.apigeneratorservice.model.API;
-import org.boldbit.illusionbackend.apigeneratorservice.model.APIDocumentsRegistry;
+import org.boldbit.illusionbackend.apigeneratorservice.model.DataModelsRegistry;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Endpoint;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Project;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.APIDocumentsRegistryRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 public class Utils {
 
     private final ProjectServiceClient projectServiceClient;
-    private final APIDocumentsRegistryRepository documentsRegistryRepository;
+    private final DataModelsRegistryRepository registryRepository;
 
     public void validateSchema(Map<String, Object> schema, Map<String, Object> body) {
         body.forEach((field, value) -> {
@@ -50,10 +50,10 @@ public class Utils {
     }
 
     public String createCollection(String endpoint, String endpointId) {
-        APIDocumentsRegistry registry = new APIDocumentsRegistry();
+        DataModelsRegistry registry = new DataModelsRegistry();
         registry.setName(endpoint);
-        registry.setDocumentIds(new ArrayList<>());
-        String collectionId = documentsRegistryRepository.save(registry).getId();
+        registry.setDataModelIds(new ArrayList<>());
+        String collectionId = registryRepository.save(registry).getId();
 
         projectServiceClient.updateEndpointPartially(endpointId, Collections.singletonMap("collectionId", collectionId));
         return collectionId;

@@ -1,10 +1,10 @@
 package org.boldbit.illusionbackend.apigeneratorservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.boldbit.illusionbackend.apigeneratorservice.model.APIDocumentsRegistry;
-import org.boldbit.illusionbackend.apigeneratorservice.model.BigDB;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.APIDocumentsRegistryRepository;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.BigDBRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.model.DataModelsRegistry;
+import org.boldbit.illusionbackend.apigeneratorservice.model.DataModel;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,8 +19,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class GetRequestService {
 
-    private final BigDBRepository bigDBRepository;
-    private final APIDocumentsRegistryRepository registryRepository;
+    private final DataModelRepository bigDBRepository;
+    private final DataModelsRegistryRepository registryRepository;
 
     public ResponseEntity<?> handleGetRequest(String collectionId, String documentId) {
         if (documentId == null) {
@@ -32,15 +32,15 @@ public class GetRequestService {
 
     private ResponseEntity<?> getAll(String collectionId) {
         List<String> documentIds = registryRepository.findById(collectionId)
-                .map(APIDocumentsRegistry::getDocumentIds)
+                .map(DataModelsRegistry::getDataModelIds)
                 .orElseThrow(() -> new RuntimeException("Invalid registry or documents not found!")); // Fixme: remove string msg
 
-        List<BigDB> documents = bigDBRepository.findAllById(documentIds);
+        List<DataModel> documents = bigDBRepository.findAllById(documentIds);
         List<Map<String, Object>> response = new ArrayList<>();
         documents.forEach(document -> {
             Map<String, Object> responseMap = new LinkedHashMap<>();
             responseMap.put("id", document.getId());
-            responseMap.putAll(document.getObject());
+            responseMap.putAll(document.getJsonObject());
             response.add(responseMap);
         });
 
@@ -48,8 +48,8 @@ public class GetRequestService {
     }
 
     private ResponseEntity<?> getById(String collectionId, String documentId) {
-        BigDB obj = registryRepository.findById(collectionId).flatMap(registry -> {
-            if (registry.getDocumentIds().contains(documentId)) {
+        DataModel obj = registryRepository.findById(collectionId).flatMap(registry -> {
+            if (registry.getDataModelIds().contains(documentId)) {
                 return bigDBRepository.findById(documentId);
             } else {
                 throw new RuntimeException("Document ID not found in registry!"); // fixme:
@@ -58,7 +58,7 @@ public class GetRequestService {
 
         Map<String, Object> response = new LinkedHashMap<>();
         response.put("id", obj.getId());
-        response.putAll(obj.getObject());
+        response.putAll(obj.getJsonObject());
 
         return ResponseEntity.ok(response);
     }

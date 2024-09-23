@@ -1,8 +1,8 @@
 package org.boldbit.illusionbackend.apigeneratorservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.APIDocumentsRegistryRepository;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.BigDBRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.utils.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +19,8 @@ import java.util.Optional;
 public class PutRequestService {
 
     private final Utils utils;
-    private final BigDBRepository repository;
-    private final APIDocumentsRegistryRepository registryRepository;
+    private final DataModelRepository repository;
+    private final DataModelsRegistryRepository registryRepository;
 
     public ResponseEntity<?> handlePutRequest(String collectionId, String documentId,
                                               Map<String, Object> schema, Map<String, Object> body) {
@@ -28,14 +28,14 @@ public class PutRequestService {
         utils.validateSchema(schema, body);
 
         Optional<Boolean> registryExists = registryRepository.findById(collectionId)
-                .map(registry -> registry.getDocumentIds().contains(documentId));
+                .map(registry -> registry.getDataModelIds().contains(documentId));
 
         if (!registryExists.orElse(false)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         return repository.findById(documentId).map(document -> {
-            document.setObject(body);
+            document.setJsonObject(body);
             repository.save(document);
 
             Map<String, Object> response = new LinkedHashMap<>();

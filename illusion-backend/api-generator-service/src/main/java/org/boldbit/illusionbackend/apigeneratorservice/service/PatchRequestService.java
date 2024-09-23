@@ -1,8 +1,8 @@
 package org.boldbit.illusionbackend.apigeneratorservice.service;
 
 import lombok.RequiredArgsConstructor;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.APIDocumentsRegistryRepository;
-import org.boldbit.illusionbackend.apigeneratorservice.repository.BigDBRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
+import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.utils.Utils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,8 +18,8 @@ import java.util.Map;
 public class PatchRequestService {
 
     private final Utils utils;
-    private final BigDBRepository repository;
-    private final APIDocumentsRegistryRepository registryRepository;
+    private final DataModelRepository repository;
+    private final DataModelsRegistryRepository registryRepository;
 
     public ResponseEntity<?> handlePatchRequest(String collectionId, String documentId,
                                                 Map<String, Object> schema, Map<String, Object> patchRequestUpdates) {
@@ -27,19 +27,19 @@ public class PatchRequestService {
         utils.validateSchema(schema, patchRequestUpdates);
 
         boolean registryExists = registryRepository.findById(collectionId)
-                .map(registry -> registry.getDocumentIds().contains(documentId)).orElse(false);
+                .map(registry -> registry.getDataModelIds().contains(documentId)).orElse(false);
 
         if (!registryExists) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
 
         return repository.findById(documentId).map(document -> {
-            mergeUpdates(document.getObject(), patchRequestUpdates);
+            mergeUpdates(document.getJsonObject(), patchRequestUpdates);
             repository.save(document);
 
             Map<String, Object> response = new LinkedHashMap<>();
             response.put("id", documentId);
-            response.putAll(document.getObject());
+            response.putAll(document.getJsonObject());
             return ResponseEntity.ok(response);
         }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
