@@ -25,6 +25,8 @@ public class EndpointService {
         if (existingEndpoint.isPresent()) {
             throw new RuntimeException("Endpoint with the same URL already exists");
         }
+
+        endpoint.setSchema(mapJsonSchemaToJava(endpoint.getSchema()));
         String endpointId = endpointRepository.save(endpoint).getId();
 
         Map<String, Object> endpointProperties = new HashMap<>();
@@ -84,5 +86,34 @@ public class EndpointService {
         endpointRepository.save(endpoint);
         log.info("Endpoint with ID {} updated successfully", endpointId);
         return endpoint;
+    }
+
+    public static Map<String, Object> mapJsonSchemaToJava(Map<String, Object> schema) {
+        Map<String, Object> resultMap = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Object> entry : schema.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof Map) {
+                resultMap.put(key, mapJsonSchemaToJava((Map<String, Object>) value));
+            } else if (value instanceof String) {
+                resultMap.put(key, mapToJavaClassName((String) value));
+            }
+        }
+        return resultMap;
+    }
+
+    private static String mapToJavaClassName(String type) {
+        return switch (type) {
+            case "String" -> String.class.getName();
+            case "Number" -> Number.class.getName();
+            case "Float" -> Float.class.getName();
+            case "Boolean" -> Boolean.class.getName();
+            case "Date" -> Date.class.getName();
+            case "Array" -> List.class.getName();
+            case "Object" -> Map.class.getName();
+            default -> throw new IllegalArgumentException("Unknown type: " + type);
+        };
     }
 }

@@ -2,6 +2,7 @@ package org.boldbit.illusionbackend.apigeneratorservice.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceClient;
+import org.boldbit.illusionbackend.apigeneratorservice.exceptions.BodyMismatchException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
 import org.boldbit.illusionbackend.apigeneratorservice.model.API;
@@ -12,9 +13,7 @@ import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegi
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Map;
+import java.util.*;
 
 @Component
 @Transactional
@@ -25,28 +24,65 @@ public class Utils {
     private final DataModelsRegistryRepository registryRepository;
 
     public void validateSchema(Map<String, Object> schema, Map<String, Object> body) {
-        body.forEach((field, value) -> {
-            if (schema.containsKey(field)) {
-                Object expectedType = schema.get(field);
+        Map<String, Object> bodySchema = mapJsonSchemaToJava(body);
 
-                if (expectedType instanceof Class<?>) {
-                    if (!((Class<?>) expectedType).isInstance(value)) {
-                        throw new RuntimeException("Invalid type for field '" + field + "'. Expected: "
-                                + ((Class<?>) expectedType).getSimpleName() + ", but got: " + value.getClass().getSimpleName());
-                    }
-                } else if (expectedType instanceof Map) {
-                    if (value instanceof Map) {
-                        validateSchema((Map<String, Object>) expectedType, (Map<String, Object>) value);
-                    } else {
-                        throw new RuntimeException("Expected a nested object for field '" + field + "'");
-                    }
-                } else {
-                    throw new RuntimeException("Unknown schema type for field '" + field + "'");
-                }
-            } else {
-                throw new RuntimeException("Unknown field '" + field + "'");
+        if (!validate(schema, bodySchema)) {
+            throw new BodyMismatchException("Body mismatch");
+        }
+    }
+
+    public boolean validate(Map<String, Object> schema, Map<String, Object> body) {
+        for (Map.Entry<String, Object> entry : body.entrySet()) {
+            String field = entry.getKey();
+            Object value = entry.getValue();
+
+            if (!schema.containsKey(field)) {
+                throw new BodyMismatchException("Body mismatch");
             }
-        });
+
+            Object expectedSchemaValue = schema.get(field);
+
+            if (expectedSchemaValue instanceof Map && value instanceof Map) {
+                if (!validate((Map<String, Object>) expectedSchemaValue, (Map<String, Object>) value)) {
+                    return false;
+                }
+            } else if (!expectedSchemaValue.equals(value)) {
+                throw new BodyMismatchException("Body mismatch");
+            }
+        }
+        return true;
+    }
+
+    public static Map<String, Object> mapJsonSchemaToJava(Map<String, Object> schema) {
+        Map<String, Object> resultMap = new LinkedHashMap<>();
+
+        for (Map.Entry<String, Object> entry : schema.entrySet()) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof Map) {
+                resultMap.put(key, mapJsonSchemaToJava((Map<String, Object>) value));
+            } else if (value instanceof List) {
+                resultMap.put(key, List.class.getName());
+            } else {
+                resultMap.put(key, mapToJavaClassName(value.getClass().getName()));
+            }
+        }
+
+        return resultMap;
+    }
+
+    private static String mapToJavaClassName(String type) {
+        return switch (type) {
+            case "java.lang.String" -> String.class.getName();
+            case "java.lang.Integer", "java.lang.Number" -> Number.class.getName();
+            case "java.lang.Float" -> Float.class.getName();
+            case "java.lang.Boolean" -> Boolean.class.getName();
+            case "java.util.Date" -> Date.class.getName();
+            case "java.util.List" -> List.class.getName();
+            case "java.util.Map" -> Map.class.getName();
+            default -> throw new IllegalArgumentException("Unknown type: " + type);
+        };
     }
 
     public String createCollection(String endpoint, String endpointId) {

@@ -31,22 +31,6 @@ public class APIGeneratorService {
     private final PatchRequestService patchRequestService;
     private final DeleteRequestService deleteRequestService;
 
-    // Todo: implement schema design
-
-    Map<String, Object> finalSchema = Map.of(
-            "name", String.class,
-            "details", Map.of(
-                    "age", Integer.class,
-                    "address", String.class,
-                    "company", Map.of(
-                            "name", String.class,
-                            "address", Map.of(
-                                    "city", String.class
-                            )
-                    )
-            )
-    );
-
     public ResponseEntity<?> requestHandler(String pathVariable,
                                          Map<String, Object> requestBody,
                                          Map<String, Object> allQueryParams,
@@ -57,6 +41,8 @@ public class APIGeneratorService {
                 api.getPath(),
                 String.valueOf(api.getHttpMethod()));
 
+        Map<String, Object> schema = endpoint.schema();
+
         String collectionId = endpoint.collectionId();
         if (collectionId == null) {
             collectionId = utils.createCollection(api.getEndpoint(), endpoint.id());
@@ -64,9 +50,9 @@ public class APIGeneratorService {
 
         return switch (api.getHttpMethod()) {
             case GET -> getRequestService.handleGetRequest(collectionId, api.getPathVariable());
-            case POST -> postRequestService.handlePostRequest(collectionId, finalSchema, api.getBody());
-            case PUT -> putRequestService.handlePutRequest(collectionId, api.getPathVariable(), finalSchema, api.getBody());
-            case PATCH -> patchRequestService.handlePatchRequest(collectionId, api.getPathVariable(), finalSchema, api.getBody());
+            case POST -> postRequestService.handlePostRequest(collectionId, schema, api.getBody());
+            case PUT -> putRequestService.handlePutRequest(collectionId, api.getPathVariable(), schema, api.getBody());
+            case PATCH -> patchRequestService.handlePatchRequest(collectionId, api.getPathVariable(), schema, api.getBody());
             case DELETE -> deleteRequestService.handleDeleteRequest(collectionId, api.getPathVariable());
             default -> ResponseEntity.ok(handleUnknownRequest());
         };
