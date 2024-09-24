@@ -10,7 +10,7 @@
     </parent>
     <groupId>org.boldbit.illusionbackend</groupId>
     <artifactId>api-generator-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
     <name>api-generator-service</name>
     <description>api-generator-service</description>
     <url/>
