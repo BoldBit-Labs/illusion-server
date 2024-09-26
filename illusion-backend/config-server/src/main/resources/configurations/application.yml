@@ -1,15 +1,26 @@
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery-server
   client:
     service-url:
-      defaultZone: http://localhost:8889/eureka
+      defaultZone: http://discovery-server:8889/eureka
+
 name:
   value: demo
+
 spring:
   cloud:
     config:
       override-system-properties: false
+  data:
+    mongodb:
+      username: admin
+      password: admin
+      host: mongo_db
+      port: 27017
+      database: illusionDB
+      auto-index-creation: true
+      authentication-database: admin
 
 management:
   tracing:

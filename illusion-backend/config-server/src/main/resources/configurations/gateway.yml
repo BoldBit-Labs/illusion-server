@@ -27,7 +27,3 @@ spring:
           uri: lb://API-GENERATOR-SERVICE
           predicates:
             - Path=/**
-
-# logging:
-#   level:
-#     org.springframework.cloud.gateway: DEBUG

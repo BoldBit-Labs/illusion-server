@@ -12,7 +12,7 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: admin
     networks:
-      - microservices-net
+      - illusion-network
 
   # Mongo Express Service
   mongo-express:
@@ -30,12 +30,98 @@ services:
       ME_CONFIG_BASICAUTH_USERNAME: mongo_user
       ME_CONFIG_BASICAUTH_PASSWORD: mongo_pass
     networks:
-      - microservices-net
+      - illusion-network
+
+  config-server:
+    container_name: config-server
+    build:
+      context: ./config-server
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    networks:
+      - illusion-network
+    restart: always
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=docker
+
+  discovery-server:
+    container_name: discovery-server
+    build:
+      context: ./discovery-server
+    depends_on:
+      - config-server
+    ports:
+      - "8889:8889"
+    expose:
+      - "8889"
+    networks:
+      - illusion-network
+    restart: always
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./gateway
+    depends_on:
+      - discovery-server
+    ports:
+      - "8893:8893"
+    expose:
+      - "8893"
+    networks:
+      - illusion-network
+    restart: always
+
+  project-service:
+    container_name: project-service
+    build:
+      context: ./project-service
+    depends_on:
+      - gateway
+    ports:
+      - "8891:8891"
+    expose:
+      - "8891"
+    networks:
+      - illusion-network
+    restart: always
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    depends_on:
+      - project-service
+    ports:
+      - "8890:8890"
+    expose:
+      - "8890"
+    networks:
+      - illusion-network
+    restart: always
+
+  api-generator-service:
+    container_name: api-generator-service
+    build:
+      context: ./api-generator-service
+    depends_on:
+      - user-service
+    ports:
+      - "8892:8892"
+    expose:
+      - "8892"
+    networks:
+      - illusion-network
+    restart: always
 
 networks:
-  microservices-net:
+  illusion-network:
     driver: bridge
 
 volumes:
   mongo:
     driver: local
+
+
