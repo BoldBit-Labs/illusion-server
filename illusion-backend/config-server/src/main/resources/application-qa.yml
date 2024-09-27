@@ -1,17 +1,16 @@
 spring:
   application:
     name: config-server
-  profiles:
-    active: qa
+
   cloud:
     config:
       server:
         git:
           uri: https://github.com/sureshsehrawatt/config-test
-          default-label: main
+          default-label: qa
           clone-on-start: true
         bootstrap: true
         enabled: true
 
 server:
-  port: 8888
+  port: 7770

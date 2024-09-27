@@ -3,11 +3,8 @@ spring:
     name: discovery-server
 
   config:
-    import: optional:configserver:http://localhost:8888
+    import: optional:configserver:http://localhost:7770
 
   cloud:
     config:
       enabled: true
-
-  profiles:
-    active: qa
