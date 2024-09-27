@@ -6,11 +6,11 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/sureshsehrawatt/config-test
+          uri: https://github.com/BoldBit-Labs/illusion-server/tree/main/illusion-backend/config-repo
           default-label: qa
           clone-on-start: true
         bootstrap: true
         enabled: true
 
 server:
-  port: 7770
+  port: 8888
