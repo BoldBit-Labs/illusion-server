@@ -1,0 +1,28 @@
+eureka:
+  instance:
+    hostname: discovery-server
+  client:
+    service-url:
+      defaultZone: http://discovery-server:9990/eureka
+
+name:
+  value: demo
+
+spring:
+  cloud:
+    config:
+     override-system-properties: false
+  data:
+    mongodb:
+      username: admin
+      password: admin
+      host: mongo_db
+      port: 27017
+      database: illusionDB
+      auto-index-creation: true
+      authentication-database: admin
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

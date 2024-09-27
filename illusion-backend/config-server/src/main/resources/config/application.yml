@@ -1,0 +1,28 @@
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    service-url:
+      defaultZone: http://localhost:8880/eureka
+
+name:
+  value: demo
+
+spring:
+  cloud:
+    config:
+     override-system-properties: false
+  data:
+    mongodb:
+      username: admin
+      password: admin
+      host: localhost
+      port: 27017
+      database: illusionDB
+      auto-index-creation: true
+      authentication-database: admin
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0

@@ -97,6 +97,6 @@ COPY --from=extract build/target/extracted/spring-boot-loader/ ./
 COPY --from=extract build/target/extracted/snapshot-dependencies/ ./
 COPY --from=extract build/target/extracted/application/ ./
 
-EXPOSE 8892
+EXPOSE 9994
 
 CMD ["sh", "-c", "/usr/local/bin/wait-for-service gateway -- java org.springframework.boot.loader.launch.JarLauncher"]

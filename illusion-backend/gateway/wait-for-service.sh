@@ -7,11 +7,11 @@ host="$1"
 shift
 cmd="$@"
 
-until nc -z "$host" 8889; do
-  >&2 echo "Waiting for $host:8889 to be available..."
+until nc -z "$host" 9990; do
+  >&2 echo "Waiting for $host:9990 to be available..."
   sleep 1
 done
 
->&2 echo "$host:8889 is available!"
+>&2 echo "$host:9990 is available!"
 
 exec $cmd

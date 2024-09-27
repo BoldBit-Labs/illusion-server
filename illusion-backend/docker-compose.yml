@@ -43,8 +43,6 @@ services:
     networks:
       - illusion-network
     restart: always
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
 
   discovery-server:
     container_name: discovery-server
@@ -53,12 +51,14 @@ services:
     depends_on:
       - config-server
     ports:
-      - "8889:8889"
+      - "9990:9990"
     expose:
-      - "8889"
+      - "9990"
     networks:
       - illusion-network
     restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
   gateway:
     container_name: gateway
@@ -67,12 +67,30 @@ services:
     depends_on:
       - discovery-server
     ports:
-      - "8893:8893"
+      - "9991:9991"
     expose:
-      - "8893"
+      - "9991"
     networks:
       - illusion-network
     restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./user-service
+    depends_on:
+      - gateway
+    ports:
+      - "9992:9992"
+    expose:
+      - "9992"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
   project-service:
     container_name: project-service
@@ -81,40 +99,30 @@ services:
     depends_on:
       - gateway
     ports:
-      - "8891:8891"
+      - "9993:9993"
     expose:
-      - "8891"
+      - "9993"
     networks:
       - illusion-network
     restart: always
-
-  user-service:
-    container_name: user-service
-    build:
-      context: ./user-service
-    depends_on:
-      - project-service
-    ports:
-      - "8890:8890"
-    expose:
-      - "8890"
-    networks:
-      - illusion-network
-    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
   api-generator-service:
     container_name: api-generator-service
     build:
       context: ./api-generator-service
     depends_on:
-      - user-service
+      - gateway
     ports:
-      - "8892:8892"
+      - "9994:9994"
     expose:
-      - "8892"
+      - "9994"
     networks:
       - illusion-network
     restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
 
 networks:
   illusion-network:
@@ -123,5 +131,3 @@ networks:
 volumes:
   mongo:
     driver: local
-
-

@@ -1,17 +1,15 @@
+server:
+  port: 8888
+
 spring:
   application:
     name: config-server
+
   profiles:
-    active: qa
+    active: native
+
   cloud:
     config:
       server:
-        git:
-          uri: https://github.com/BoldBit-Labs/illusion-server/tree/main/illusion-backend/config-repo
-          default-label: main
-          clone-on-start: true
-        bootstrap: true
-        enabled: true
-
-server:
-  port: 8888
+        native:
+          search-locations: classpath:/config
