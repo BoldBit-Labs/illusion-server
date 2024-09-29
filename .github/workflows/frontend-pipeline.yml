@@ -9,7 +9,7 @@ on:
 jobs:
 
   build-image:
-    name: Build FE Docker image
+    name: Build Frontend Docker image
 
     runs-on: ubuntu-latest
 
@@ -31,11 +31,11 @@ jobs:
       - name: Build & Push to DockerHub
         uses: docker/build-push-action@v5
         with:
-          context: book-network-ui
-          file: docker/frontend/Dockerfile
+          context: ./illusion-frontend
+          file: illusion-frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:latest,${{ secrets.DOCKERHUB_USERNAME }}/bsn-ui:${{ steps.extract_version.outputs.VERSION }}
 
   deploy:
     name: Deploy Frontend
@@ -44,14 +44,14 @@ jobs:
     steps:
 
       - name: Create deployment folder
-        run: ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} "mkdir -p ci-cd"
+        run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "mkdir -p ci-cd"
 
       - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }}:ci-cd/docker-compose.yml
+        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:ci-cd/docker-compose.yml
 
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.VPS_USERNAME }}@${{ secrets.VPS_IP }} <<EOF
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} <<EOF
           cd ci-cd
           docker compose -f docker-compose.yml pull -q
           docker compose -f docker-compose.yml up -d
