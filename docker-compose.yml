@@ -1,4 +1,19 @@
 services:
+
+  frontend:
+    container_name: frontend
+    build:
+      context: ./illusion-frontend
+    ports:
+      - 3333:3333
+    expose:
+      - 3333
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      NODE_ENV: production
+
   # MongoDB Service
   mongodb:
     image: mongo
@@ -35,7 +50,7 @@ services:
   config-server:
     container_name: config-server
     build:
-      context: ./config-server
+      context: ./illusion-backend/config-server
     ports:
       - "8888:8888"
     expose:
@@ -47,7 +62,7 @@ services:
   discovery-server:
     container_name: discovery-server
     build:
-      context: ./discovery-server
+      context: ./illusion-backend/discovery-server
     depends_on:
       - config-server
     ports:
@@ -63,7 +78,7 @@ services:
   gateway:
     container_name: gateway
     build:
-      context: ./gateway
+      context: ./illusion-backend/gateway
     depends_on:
       - discovery-server
     ports:
@@ -79,7 +94,7 @@ services:
   user-service:
     container_name: user-service
     build:
-      context: ./user-service
+      context: ./illusion-backend/user-service
     depends_on:
       - gateway
     ports:
@@ -95,7 +110,7 @@ services:
   project-service:
     container_name: project-service
     build:
-      context: ./project-service
+      context: ./illusion-backend/project-service
     depends_on:
       - gateway
     ports:
@@ -111,7 +126,7 @@ services:
   api-generator-service:
     container_name: api-generator-service
     build:
-      context: ./api-generator-service
+      context: ./illusion-backend/api-generator-service
     depends_on:
       - gateway
     ports:
