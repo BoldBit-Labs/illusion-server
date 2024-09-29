@@ -1,6 +1,6 @@
 services:
 
-  frontend:
+  illusion-frontend:
     container_name: frontend
     build:
       context: ./illusion-frontend
