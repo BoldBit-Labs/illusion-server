@@ -36,8 +36,7 @@ jobs:
           file: illusion-frontend/Dockerfile
           push: true
           platforms: linux/amd64
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest,${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:${{ steps.extract_version.outputs.VERSION }}
-
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest
   deploy:
     name: Deploy Frontend
     runs-on: ubuntu-20.04
