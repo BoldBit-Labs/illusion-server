@@ -44,14 +44,14 @@ jobs:
     steps:
 
       - name: Create deployment folder
-        run: ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "mkdir -p ci-cd"
+        run: ssh ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }} "mkdir -p ci-cd"
 
       - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:ci-cd/docker-compose.yml
+        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }}:ci-cd/docker-compose.yml
 
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} <<EOF
+          ssh ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }} <<EOF
           cd ci-cd
           docker compose -f docker-compose.yml pull -q
           docker compose -f docker-compose.yml up -d
