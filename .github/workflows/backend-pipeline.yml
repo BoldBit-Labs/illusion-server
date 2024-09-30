@@ -46,9 +46,8 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
       - name: Build and push ${{ matrix.image_name }} to DockerHub
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: ./illusion-backend/${{ matrix.image_name }}
-          file: illusion-backend/${{ matrix.image_name }}/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-backend/${{ matrix.image_name }}:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:latest
