@@ -15,25 +15,21 @@ jobs:
       matrix:
         image_name: ["config-server", "discovery-server", "gateway", "user-service", "project-service", "api-generator-service"]
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Setup Java
+      - name: Setup Java 17
         uses: actions/setup-java@v3
         with:
           java-version: 17
           distribution: "corretto"
 
-      - name: Check pom.xml content
-        run: |
-          cat illusion-backend/${{ matrix.image_name }}/pom.xml
-
-      - name: Build
+      - name: Build docker image ${{ matrix.image_name }}
         working-directory: illusion-backend/${{ matrix.image_name }}
         run: |
-          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:$(date +%s)
+          docker build . --file Dockerfile --tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:$(date +%s)"
           VERSION=$(jq -r '.version // "N/A"' pom.xml) # Handle missing version
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
 
