@@ -17,34 +17,25 @@ jobs:
 
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Setup Java 17
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@v4
         with:
-          java-version: 17
-          distribution: "corretto"
+          distribution: 'corretto'
+          java-version: '17'
 
-#      - name: Build docker image ${{ matrix.image_name }}
-#        working-directory: illusion-backend/${{ matrix.image_name }}
-#        run: |
-#          docker build . --file Dockerfile --tag "${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:$(date +%s)"
-#          VERSION=$(jq -r '.version // "N/A"' pom.xml) # Handle missing version
-#          echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
-
-      - name: build ${{ matrix.image_name }}
-        working-directory: illusion-backend/${{ matrix.image_name }}
+      - name: Build the application
         run: |
+          cd ./illusion-backend/${{ matrix.image_name }}
           mvn clean
           mvn -B package --file pom.xml
 
-      - name: build the docker image
-        uses: docker/build-push-action@v4
+      - name: Build docker image
+        uses: docker/build-push-action@v6
         with:
-          working-directory: illusion-backend/${{ matrix.image_name }}
-          context: .
-          file: Dockerfile
+          context: ./illusion-backend/${{ matrix.image_name }}
           push: false
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:latest
 
