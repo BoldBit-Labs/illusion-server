@@ -8,7 +8,9 @@ on:
 
 jobs:
 
-  build:
+  build-image:
+    name: Build Backend Docker image
+    
     strategy:
       matrix:
         image_name: ["config-server", "discovery-server", "gateway", "user-service", "project-service", "api-generator-service"]
