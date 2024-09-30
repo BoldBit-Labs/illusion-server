@@ -8,8 +8,8 @@ on:
 
 jobs:
 
-  build:
-    name: Build Frontend Docker image
+  build-frontend:
+    name: Build Frontend
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -29,9 +29,8 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest
 
 
-  build-image:
-    name: Build Backend Docker image
-
+  build-backend:
+    name: Build Backend
     strategy:
       matrix:
         image_name: ["config-server", "discovery-server", "gateway", "user-service", "project-service", "api-generator-service"]
