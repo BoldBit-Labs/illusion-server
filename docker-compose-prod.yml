@@ -1,0 +1,127 @@
+services:
+
+  illusion-frontend:
+    container_name: frontend
+    image: jaisehrawat/illusion-frontend:latest
+    ports:
+      - 3333:3333
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      NODE_ENV: production
+
+  # MongoDB Service
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo:/data/db  # Persist MongoDB data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - illusion-network
+
+  # Mongo Express Service
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: mongo_user
+      ME_CONFIG_BASICAUTH_PASSWORD: mongo_pass
+    networks:
+      - illusion-network
+
+  config-server:
+    container_name: config-server
+    image: jaisehrawat/config-server:latest
+    ports:
+      - "8888:8888"
+    networks:
+      - illusion-network
+    restart: always
+
+  discovery-server:
+    container_name: discovery-server
+    image: jaisehrawat/discovery-server:latest
+    depends_on:
+      - config-server
+    ports:
+      - "8880:8880"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  gateway:
+    container_name: gateway
+    image: jaisehrawat/gateway:latest
+    depends_on:
+      - discovery-server
+    ports:
+      - "8881:8881"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  user-service:
+    container_name: user-service
+    image: jaisehrawat/user-service:latest
+    depends_on:
+      - gateway
+    ports:
+      - "8882:8882"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  project-service:
+    container_name: project-service
+    image: jaisehrawat/project-service:latest
+    depends_on:
+      - gateway
+    ports:
+      - "8883:8883"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-generator-service:
+    container_name: api-generator-service
+    image: jaisehrawat/api-generator-service:latest
+    depends_on:
+      - gateway
+    ports:
+      - "8884:8884"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+networks:
+  illusion-network:
+    driver: bridge
+
+volumes:
+  mongo:
+    driver: local
