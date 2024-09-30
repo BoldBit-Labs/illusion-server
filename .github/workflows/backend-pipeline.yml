@@ -10,7 +10,7 @@ jobs:
 
   build-image:
     name: Build Backend Docker image
-    
+
     strategy:
       matrix:
         image_name: ["config-server", "discovery-server", "gateway", "user-service", "project-service", "api-generator-service"]
@@ -27,10 +27,9 @@ jobs:
           distribution: "corretto"
 
       - name: Build
-        working-directory: ${{ matrix.image_name }}
+        working-directory: illusion-backend/${{ matrix.image_name }}
         run: |
-          cd illusion-backend/${{ matrix.service }}
-          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:$(date +%s)
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.image_name }}:$(date +%s)
           echo "VERSION=$(jq -r '.version' pom.xml)" >> $GITHUB_OUTPUT
 
       - name: Login to DockerHub
@@ -46,38 +45,3 @@ jobs:
           file: illusion-backend/${{ matrix.image_name }}/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-backend/${{ matrix.image_name }}:latest
-
-
-
-
-
-#
-#  build-image:
-#    name: Build Backend Docker image
-#
-#    runs-on: ubuntu-latest
-#
-#    steps:
-#      - name: Checkout code
-#        uses: actions/checkout@v4
-#
-#      - name: Build the Docker image
-#        run: |
-#          cd illusion-frontend
-#          docker build . --file Dockerfile --tag illusion-frontend:$(date +%s)
-#          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
-#
-#      - name: Login to DockerHub
-#        uses: docker/login-action@v3
-#        with:
-#          username: ${{ secrets.DOCKERHUB_USERNAME }}
-#          password: ${{ secrets.DOCKERHUB_TOKEN }}
-#
-#      - name: Build & Push to DockerHub
-#        uses: docker/build-push-action@v5
-#        with:
-#          context: ./illusion-frontend
-#          file: illusion-frontend/Dockerfile
-#          push: true
-#          platforms: linux/amd64
-#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest
