@@ -66,9 +66,9 @@ services:
     depends_on:
       - config-server
     ports:
-      - "9990:9990"
+      - "8880:8880"
     expose:
-      - "9990"
+      - "8880"
     networks:
       - illusion-network
     restart: always
@@ -82,9 +82,9 @@ services:
     depends_on:
       - discovery-server
     ports:
-      - "9991:9991"
+      - "8881:8881"
     expose:
-      - "9991"
+      - "8881"
     networks:
       - illusion-network
     restart: always
@@ -98,9 +98,9 @@ services:
     depends_on:
       - gateway
     ports:
-      - "9992:9992"
+      - "8882:8882"
     expose:
-      - "9992"
+      - "8882"
     networks:
       - illusion-network
     restart: always
@@ -114,9 +114,9 @@ services:
     depends_on:
       - gateway
     ports:
-      - "9993:9993"
+      - "8883:8883"
     expose:
-      - "9993"
+      - "8883"
     networks:
       - illusion-network
     restart: always
@@ -130,9 +130,9 @@ services:
     depends_on:
       - gateway
     ports:
-      - "9994:9994"
+      - "8884:8884"
     expose:
-      - "9994"
+      - "8884"
     networks:
       - illusion-network
     restart: always

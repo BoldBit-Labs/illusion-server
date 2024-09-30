@@ -3,7 +3,7 @@ eureka:
     hostname: discovery-server
   client:
     service-url:
-      defaultZone: http://discovery-server:9990/eureka
+      defaultZone: http://discovery-server:8880/eureka
 
 name:
   value: demo

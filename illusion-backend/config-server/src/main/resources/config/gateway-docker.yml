@@ -1,5 +1,5 @@
 server:
-  port: 9991
+  port: 8881
 
 spring:
   cloud:
@@ -9,16 +9,16 @@ spring:
           enabled: true
       routes:
         - id: user-service
-          uri: http://user-service:9992
+          uri: http://user-service:8882
           predicates:
             - Path=/api/user/**
 
         - id: project-service
-          uri: http://project-service:9993/
+          uri: http://project-service:8883/
           predicates:
             - Path=/api/projects/**
 
         - id: api-generator-service
-          uri: http://api-generator-service:9994/
+          uri: http://api-generator-service:8884/
           predicates:
             - Path=/**
