@@ -37,21 +37,28 @@ jobs:
           push: true
           platforms: linux/amd64
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest
+          
   deploy:
     name: Deploy Frontend
     runs-on: ubuntu-20.04
     needs: [ build-image ]
     steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Create deployment folder
-        run: ssh ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }} "mkdir -p ci-cd"
+        run: |
+          ssh -oStrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} "mkdir -p ci-cd"
 
       - name: Copy docker-compose file
-        run: scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }}:ci-cd/docker-compose.yml
+        run: |
+          scp -oStrictHostKeyChecking=no docker-compose.yml ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }}:ci-cd/docker-compose.yml
 
       - name: Set ENV variable and deploy
         run: |
-          ssh ${{ secrets.SSH_USERNAME_TEST }}@${{ secrets.SSH_IP_TEST }} <<EOF
+          ssh -oStrictHostKeyChecking=no ${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_IP }} <<EOF
           cd ci-cd
           docker compose -f docker-compose.yml pull -q
           docker compose -f docker-compose.yml up -d
