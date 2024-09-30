@@ -1,0 +1,81 @@
+name: Backend Pipeline
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    strategy:
+      matrix:
+        image_name: ["config-server", "discovery-server", "gateway", "user-service", "project-service", "api-generator-service"]
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: "corretto"
+
+      - name: Build
+        working-directory: ${{ matrix.image_name }}
+        run: |
+          cd illusion-backend/${{ matrix.service }}
+          docker build . --file Dockerfile --tag ${{ secrets.DOCKERHUB_USERNAME }}/${{ matrix.service }}:$(date +%s)
+          echo "VERSION=$(jq -r '.version' pom.xml)" >> $GITHUB_OUTPUT
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push ${{ matrix.image_name }} to DockerHub
+        uses: docker/build-push-action@v5
+        with:
+          context: ./illusion-backend/${{ matrix.image_name }}
+          file: illusion-backend/${{ matrix.image_name }}/Dockerfile
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-backend/${{ matrix.image_name }}:latest
+
+
+
+
+
+#
+#  build-image:
+#    name: Build Backend Docker image
+#
+#    runs-on: ubuntu-latest
+#
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Build the Docker image
+#        run: |
+#          cd illusion-frontend
+#          docker build . --file Dockerfile --tag illusion-frontend:$(date +%s)
+#          echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+#
+#      - name: Login to DockerHub
+#        uses: docker/login-action@v3
+#        with:
+#          username: ${{ secrets.DOCKERHUB_USERNAME }}
+#          password: ${{ secrets.DOCKERHUB_TOKEN }}
+#
+#      - name: Build & Push to DockerHub
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: ./illusion-frontend
+#          file: illusion-frontend/Dockerfile
+#          push: true
+#          platforms: linux/amd64
+#          tags: ${{ secrets.DOCKERHUB_USERNAME }}/illusion-frontend:latest
