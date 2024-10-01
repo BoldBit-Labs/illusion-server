@@ -20,7 +20,7 @@ services:
     container_name: mongo_db
     restart: always
     ports:
-      - "27027:27027" # fixme: use 27017 in production
+      - "27027:27017" # fixme: use 27017 in production
     volumes:
       - mongo:/data/db  # Persist MongoDB data
     environment:
@@ -37,7 +37,7 @@ services:
     depends_on:
       - mongodb
     ports:
-      - "8889:8889" # fixme: use 8081 in production
+      - "8889:8081" # fixme: use 8081 in production
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: admin
       ME_CONFIG_MONGODB_ADMINPASSWORD: admin
