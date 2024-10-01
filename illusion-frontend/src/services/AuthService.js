@@ -50,7 +50,7 @@ class AuthService {
   
   async fetchProjects() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/${authServiceInstance.getCurrentUser()}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/projects/${authServiceInstance.getCurrentUser()}`);
       if (response.status === 200) {
         return response.data;
       }
@@ -65,7 +65,7 @@ class AuthService {
   async createProject(name, description, apiPrefix) {
     try {
       const ownerId = this.getCurrentUser()
-      const response = await axios.post(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/create-project`, {name, description, apiPrefix, ownerId});
+      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/projects/create-project`, {name, description, apiPrefix, ownerId});
       if (response.status === 200) {
         return response.data;
       }
@@ -79,7 +79,7 @@ class AuthService {
 
   async getProject(projectId) {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_PS_BASE_URL}/api/projects/project/${projectId}`);
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/projects/project/${projectId}`);
       if (response.status === 200) {
         return response.data;
       }
@@ -96,7 +96,7 @@ class AuthService {
     
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_PS_BASE_URL}/api/endpoints/create-endpoint`, 
+        `${process.env.REACT_APP_BASE_URL}/api/endpoints/create-endpoint`, 
         {
           projectId: postData.projectId,
           name: postData.name,
