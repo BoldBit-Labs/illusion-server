@@ -1,10 +1,13 @@
 import axios from "axios";
 
 class AuthService {
+
+  static REACT_APP_BASE_URL = "https://illusion-server.buzz";
+
   async signIn(email, password) {
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/api/user/signin`,
+        `${AuthService.REACT_APP_BASE_URL}/api/user/signin`,
         { email, password }
       );
       if (response.status === 200) {
@@ -21,7 +24,7 @@ class AuthService {
 
   async signUp(fullName, email, password) {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user/signup`,
+      const response = await axios.post(`${AuthService.REACT_APP_BASE_URL}/api/user/signup`,
         { fullName, email, password }
       );
       if (response.status === 200) {
@@ -50,7 +53,7 @@ class AuthService {
   
   async fetchProjects() {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/projects/${authServiceInstance.getCurrentUser()}`);
+      const response = await axios.get(`${AuthService.REACT_APP_BASE_URL}/api/projects/${authServiceInstance.getCurrentUser()}`);
       if (response.status === 200) {
         return response.data;
       }
@@ -65,7 +68,7 @@ class AuthService {
   async createProject(name, description, apiPrefix) {
     try {
       const ownerId = this.getCurrentUser()
-      const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/projects/create-project`, {name, description, apiPrefix, ownerId});
+      const response = await axios.post(`${AuthService.REACT_APP_BASE_URL}/api/projects/create-project`, {name, description, apiPrefix, ownerId});
       if (response.status === 200) {
         return response.data;
       }
@@ -79,7 +82,7 @@ class AuthService {
 
   async getProject(projectId) {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/projects/project/${projectId}`);
+      const response = await axios.get(`${AuthService.REACT_APP_BASE_URL}/api/projects/project/${projectId}`);
       if (response.status === 200) {
         return response.data;
       }
@@ -96,7 +99,7 @@ class AuthService {
     
     try {
       const response = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/api/endpoints/create-endpoint`, 
+        `${AuthService.REACT_APP_BASE_URL}/api/endpoints/create-endpoint`, 
         {
           projectId: postData.projectId,
           name: postData.name,
