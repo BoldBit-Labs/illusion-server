@@ -17,7 +17,7 @@ services:
     container_name: mongo_db
     restart: always
     ports:
-      - "27027:27027" # use 27017 in production
+      - "27027:27027" # fixme: use 27017 in production
     volumes:
       - mongo:/data/db  # Persist MongoDB data
     environment:
