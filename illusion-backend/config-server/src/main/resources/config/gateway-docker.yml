@@ -13,12 +13,17 @@ spring:
           predicates:
             - Path=/api/user/**
 
-        - id: project-service
-          uri: http://project-service:8883/
+        - id: project-service-api-projects
+          uri: http://project-service:8883
           predicates:
             - Path=/api/projects/**
 
+        - id: project-service-api-endpoints
+          uri: http://project-service:8883
+          predicates:
+            - Path=/api/endpoints/**
+
         - id: api-generator-service
-          uri: http://api-generator-service:8884/
+          uri: http://api-generator-service:8884
           predicates:
             - Path=/**
