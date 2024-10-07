@@ -5,12 +5,14 @@ import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Label from "../../components/Label";
 import Text from "../../components/Text";
+import Loader from "../../components/Loader";
 
 function SignupPage() {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isChecked, setIsChecked] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const submit = async (e) => {
@@ -20,9 +22,13 @@ function SignupPage() {
       return;
     }
 
+    setLoading(true);
     const success = await AuthService.signUp(fullName, email, password);
+    setLoading(false);
+
     if (success) {
       navigate("/");
+      // todo: change alert to popup or something else
       alert("Sign Up successfull");
     } else {
       alert("Sign Up failed");
@@ -31,6 +37,7 @@ function SignupPage() {
 
   return (
     <div className="flex items-center justify-center h-screen">
+      {loading && <Loader />}
       <div className="w-1/3 p-10 rounded-3xl backdrop-blur-3xl bg-slate-100 text-black">
         <form onSubmit={submit}>
           <Label htmlFor="name">Name</Label>
