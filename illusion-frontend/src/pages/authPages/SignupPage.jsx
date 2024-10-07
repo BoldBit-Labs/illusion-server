@@ -16,7 +16,7 @@ function SignupPage() {
   const submit = async (e) => {
     e.preventDefault();
     if (!isChecked) {
-      alert("Please accept the terms and conditions to proceed.");
+      alert("Please read and accept the terms and conditions to proceed.");
       return;
     }
 

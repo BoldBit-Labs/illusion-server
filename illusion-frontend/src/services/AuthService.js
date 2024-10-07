@@ -24,7 +24,7 @@ class AuthService {
       const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/api/user/signup`,
         { fullName, email, password }
       );
-      if (response.status === 200) {
+      if (response.status === 201) {
         localStorage.setItem("user", JSON.stringify(response.data));
         return true;
       }
