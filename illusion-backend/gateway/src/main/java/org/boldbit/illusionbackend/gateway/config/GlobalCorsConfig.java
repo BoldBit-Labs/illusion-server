@@ -13,7 +13,8 @@ public class GlobalCorsConfig extends CorsConfiguration {
     @Bean
     public CorsWebFilter corsWebFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("http://localhost:3333");
+//        corsConfiguration.addAllowedOrigin("http://localhost:3333");
+        corsConfiguration.addAllowedOrigin("https://illusion-server.xyz");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
 //        corsConfiguration.setAllowCredentials(true);
