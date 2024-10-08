@@ -9,13 +9,13 @@ import projectServiceInstance from "../../services/ProjectService";
 function NewProject() {
     const [projectName, setProjectName] = useState("");
     const [description, setDescription] = useState("");
-    const [apiPrefix, setApiPrefix] = useState("");
+    const [endpointPrefix, setEndpointPrefix] = useState("");
     const navigate = useNavigate()
 
     const submit = async (e) => {
         e.preventDefault();
 
-        const success = await projectServiceInstance.createProject(projectName, description, apiPrefix);
+        const success = await projectServiceInstance.createProject(projectName, description, endpointPrefix);
         if (success) {
             navigate("/");
         } else {
@@ -37,8 +37,8 @@ function NewProject() {
                     <Label htmlFor="description">Description</Label>
                     <Input id="description" placeholder="Description..." value={description} onChange={(e) => setDescription(e.target.value)} className="mt-2 mb-6" required />
 
-                    <Label htmlFor="prefix">API Prefix</Label>
-                    <Input id="prefix" placeholder="Example: /api/v1" value={apiPrefix} onChange={(e) => setApiPrefix(e.target.value)} className="mt-2 mb-6" required />
+                    <Label htmlFor="prefix">Endpoint Prefix</Label>
+                    <Input id="prefix" placeholder="Example: /api/v1" value={endpointPrefix} onChange={(e) => setEndpointPrefix(e.target.value)} className="mt-2 mb-6" required />
 
                     <div className="flex sticky bottom-0 justify-between p-4 rounded-br-2xl rounded-bl-2xl -mx-4">
                         <Button text={"Cancel"} />

@@ -20,12 +20,12 @@ class ProjectService {
     }
   }
 
-  async createProject(name, description, apiPrefix) {
+  async createProject(name, description, endpointPrefix) {
     try {
       const ownerId = authServiceInstance.getCurrentUser();
       const response = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/api/projects/create-project`,
-        { name, description, apiPrefix, ownerId }
+        { name, description, endpointPrefix, ownerId }
       );
       if (response.status === 200) {
         return response.data;

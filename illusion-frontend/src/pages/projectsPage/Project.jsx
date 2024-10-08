@@ -35,7 +35,7 @@ function Project() {
 
       <div className="pt-8 p-12">
         <div className="w-fit">
-          <ProjectNamePlate projectName={project.name} projectId={projectId} apiPrefix={project.apiPrefix}/>
+          <ProjectNamePlate projectName={project.name} projectId={projectId} endpointPrefix={project.endpointPrefix}/>
         </div>
 
         <NewEndpointModal projectInfo={projectId} />
