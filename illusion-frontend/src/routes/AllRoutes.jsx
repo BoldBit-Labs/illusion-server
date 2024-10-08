@@ -10,7 +10,7 @@ import HomePage from "../pages/HomePage/HomePage";
 import NotFoundPage from "../pages/NotFoundPage";
 import SigninPage from "../pages/authPages/SigninPage";
 import SignupPage from "../pages/authPages/SignupPage";
-import Dashboard from "../pages/HomePage/Dashboard";
+import Dashboard from "../pages/HomePage/dashboard/Dashboard";
 import authServiceInstance from "../services/AuthService";
 import NewProject from "../pages/projectsPage/NewProject";
 import Project from "../pages/projectsPage/Project";

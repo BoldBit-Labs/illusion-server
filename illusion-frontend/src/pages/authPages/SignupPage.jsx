@@ -86,7 +86,8 @@ function SignupPage() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-      {loading && <Loader />}
+      <Loader visibility={loading} />
+      
       <div className="w-1/3 p-10 rounded-3xl backdrop-blur-3xl bg-slate-100 text-black">
         <form onSubmit={submit}>
           <Label htmlFor="fullName">Name</Label>

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import authServiceInstance from "../../services/AuthService";
 import { useNavigate } from "react-router-dom";
 import Label from "../../components/Label";
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import Text from "../../components/Text";
+import projectServiceInstance from "../../services/ProjectService";
 
 function NewProject() {
     const [projectName, setProjectName] = useState("");
@@ -15,7 +15,7 @@ function NewProject() {
     const submit = async (e) => {
         e.preventDefault();
 
-        const success = await authServiceInstance.createProject(projectName, description, apiPrefix);
+        const success = await projectServiceInstance.createProject(projectName, description, apiPrefix);
         if (success) {
             navigate("/");
         } else {

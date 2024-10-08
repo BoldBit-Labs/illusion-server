@@ -52,7 +52,9 @@ public class ProjectService {
                 .orElseThrow(() -> new ProjectNotFoundException("Project not found"));
 
         projectRepository.delete(project);
-        deleteAllEndpoints(project.getEndpoints());
+        if (project.getEndpoints() != null) {
+            deleteAllEndpoints(project.getEndpoints());
+        }
         userClient.updateUser(project.getOwnerId(), Collections.singletonMap("projects", projectId));
 
         return true;

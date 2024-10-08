@@ -1,6 +1,8 @@
 import React from 'react';
 
-function Loader() {
+function Loader({ visibility }) {
+    if (!visibility) return null; 
+
     return (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
             <div className="flex-col gap-4">
