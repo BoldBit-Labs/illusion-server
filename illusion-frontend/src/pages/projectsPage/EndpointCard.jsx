@@ -1,9 +1,11 @@
 import React from 'react';
 import Text from '../../components/Text';
 import { FaRegTrashCan, FaRegCopy, FaRegPenToSquare } from "react-icons/fa6";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function EndpointCard({ project, endpoint }) {
-    const fullUrl = `https://${endpoint.id}.illusion.com${project.endpointPrefix ? project.endpointPrefix : ''}${endpoint.path}`;
+    const fullUrl = `https://${endpoint.id}.illusion-server.buzz${project.endpointPrefix ? project.endpointPrefix : ''}${endpoint.path}`;
 
     const colors = [
         { text: 'text-red-800', bg: 'bg-red-200' },
@@ -20,26 +22,36 @@ function EndpointCard({ project, endpoint }) {
         { text: 'text-orange-800', bg: 'bg-orange-200' },
     ];
 
+    const copyToClipboard = async () => {
+        try {
+            await navigator.clipboard.writeText(fullUrl);
+            toast.success("Copied!");
+        } catch (err) {
+            toast.error("Failed to copy!");
+        }
+    };
+
     // Randomly select a color
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     return (
         <div>
+            <ToastContainer />
             <li className={`mb-4 items-center justify-between p-4 rounded-xl border-dashed border-2 border-gray-500 hover:scale-90 duration-200 cursor-pointer`}>
                 <div className="flex items-center justify-between mb-2">
                     <Text className={`px-2 rounded-lg ${randomColor.text} ${randomColor.bg}`}>{fullUrl}</Text>
                     <div className="flex">
                         <FaRegPenToSquare className="hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); console.log("Edit Endpoint: "); }} />
-                        <FaRegCopy className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); console.log("Copying URL: ", fullUrl); }} />
+                        <FaRegCopy className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); copyToClipboard() }} />
                         <FaRegTrashCan className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); console.log("Deleting endpoint: ", endpoint.id); }} />
                     </div>
                 </div>
                 <div className="flex items-center mb-2">
-                    { endpoint.allowedMethods.GET ? <Text className="px-1 mr-3 rounded-lg bg-green-300 text-green-800" >GET</Text> : ""}
-                    { endpoint.allowedMethods.GETID ? <Text className="px-1 mr-3 rounded-lg bg-sky-200 text-sky-800" >GET/:ID</Text> : ""}
-                    { endpoint.allowedMethods.POST ? <Text className="px-1 mr-3 rounded-lg bg-yellow-200 text-yellow-800" >POST</Text> : ""}
-                    { endpoint.allowedMethods.PUT ? <Text className="px-1 mr-3 rounded-lg bg-blue-200 text-blue-800" >PUT</Text> : ""}
-                    { endpoint.allowedMethods.DELETE ? <Text className="px-1 mr-3 rounded-lg bg-red-200 text-red-800" >DELETE/:ID</Text> : ""}
+                    {endpoint.allowedMethods.GET ? <Text className="px-1 mr-3 rounded-lg bg-green-300 text-green-800" >GET</Text> : ""}
+                    {endpoint.allowedMethods.GETID ? <Text className="px-1 mr-3 rounded-lg bg-sky-200 text-sky-800" >GET/:ID</Text> : ""}
+                    {endpoint.allowedMethods.POST ? <Text className="px-1 mr-3 rounded-lg bg-yellow-200 text-yellow-800" >POST</Text> : ""}
+                    {endpoint.allowedMethods.PUT ? <Text className="px-1 mr-3 rounded-lg bg-blue-200 text-blue-800" >PUT</Text> : ""}
+                    {endpoint.allowedMethods.DELETE ? <Text className="px-1 mr-3 rounded-lg bg-red-200 text-red-800" >DELETE/:ID</Text> : ""}
                 </div>
                 <div>
                     <Text>{endpoint.description}</Text>

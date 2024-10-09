@@ -39,9 +39,9 @@ const Dashboard = () => {
 
       {projects.length === 0 ? (
         <div className="text-center">
-          <Text size='xxl' weight="bold">No Projects</Text>
+          <Text size='xxl' weight="bold">No Projects!</Text>
           <Text tag='p' size='xxl' weight="bold">You don't have any projects yet.</Text>
-          <Button onClick={handleCreateProject} text="Create New Project" />
+          <Button className="mt-12" onClick={handleCreateProject} text="Create New Project" />
         </div>
       ) : (
         <div>

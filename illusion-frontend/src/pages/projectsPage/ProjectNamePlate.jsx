@@ -9,7 +9,7 @@ function ProjectNamePlate({ projectName, projectId, endpointPrefix }) {
                 <Text weight='medium'>
                     https://
                     <Text weight='medium' className={"bg-sky-300 rounded-md px-2 py-1 text-sky-800"}>{projectId}</Text>
-                    .illusion.com
+                    .illusion-server.buzz
                     { endpointPrefix ? <Text weight='medium' className={"bg-yellow-200 rounded-md px-2 py-1 text-yellow-800"}>{endpointPrefix}</Text> : '' }
                     /
                     <Text weight='medium' className={"bg-red-200 rounded-md px-2 py-1 text-red-800"}>:endpoint</Text>

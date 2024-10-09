@@ -6,6 +6,8 @@ import Button from "../../components/Button";
 import Label from "../../components/Label";
 import Text from "../../components/Text";
 import Loader from "../../components/Loader";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function SigninPage() {
   const [email, setEmail] = useState("");
@@ -23,9 +25,12 @@ function SigninPage() {
       setLoading(false);
 
       if (success) {
+        setTimeout(() => {
+          toast.success("Signin successfully");
+        }, 0);
         navigate("/");
       } else {
-        alert("Invalid email or password. Please try again.");
+        toast.error("Invalid email or password. Please try again.");
       }
     }
   };
@@ -57,6 +62,7 @@ function SigninPage() {
   return (
     <div className="flex items-center justify-center h-screen">
       <Loader visibility={loading} />
+      <ToastContainer />
       
       <div className="w-1/3 p-10 rounded-3xl backdrop-blur-3xl bg-slate-100 text-black">
         <form onSubmit={handleSubmit}>

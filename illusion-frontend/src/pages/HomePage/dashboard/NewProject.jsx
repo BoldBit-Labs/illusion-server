@@ -22,6 +22,10 @@ function NewProject() {
             alert("Error in creating project");
         }
     };
+    
+    const navigateBack = () => {
+        navigate("/");
+    }
 
     return (
         <div className="flex items-center justify-center h-screen">
@@ -41,7 +45,7 @@ function NewProject() {
                     <Input id="prefix" placeholder="Example: /api/v1" value={endpointPrefix} onChange={(e) => setEndpointPrefix(e.target.value)} className="mt-2 mb-6" required />
 
                     <div className="flex sticky bottom-0 justify-between p-4 rounded-br-2xl rounded-bl-2xl -mx-4">
-                        <Button text={"Cancel"} />
+                        <Button text={"Cancel"} onClick={navigateBack} />
                         <Button type="submit" text="Create" />
                     </div>
                 </form>
