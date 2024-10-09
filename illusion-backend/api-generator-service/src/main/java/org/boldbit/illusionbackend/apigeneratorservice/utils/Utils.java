@@ -164,9 +164,9 @@ public class Utils {
         Project project = projectServiceClient.getProjectById(projectId);
 
         Project.Endpoint matchingEndpoint = project.endpoints().stream()
-                .filter(endpoint -> endpoint.url().equals(path))
+                .filter(endpoint -> endpoint.path().equals(path))
                 .findFirst()
-                .orElseThrow(() -> new NoMatchingEndpointFound("No matching endpoint found for the provided URL"));
+                .orElseThrow(() -> new NoMatchingEndpointFound("No matching endpoint found for the provided path"));
 
         Endpoint endpoint = projectServiceClient.getEndpointById(matchingEndpoint.id());
 

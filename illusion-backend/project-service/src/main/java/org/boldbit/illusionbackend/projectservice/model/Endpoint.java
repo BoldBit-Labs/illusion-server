@@ -23,7 +23,7 @@ public class Endpoint {
 
     @Field("project_id")
     private String projectId;
-    private String url;
+    private String path;
     private String description;
     private String collectionId;
 

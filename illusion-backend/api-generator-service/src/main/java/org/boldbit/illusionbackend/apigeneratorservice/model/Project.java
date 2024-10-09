@@ -12,6 +12,6 @@ public record Project(
 ) {
     public record Endpoint(
             String id,
-            String url
+            String path
     ) {}
 }

@@ -8,11 +8,11 @@ function ProjectNamePlate({ projectName, projectId, endpointPrefix }) {
             <div className='mt-2'>
                 <Text weight='medium'>
                     https://
-                    <Text weight='medium' className={"bg-sky-400 rounded-md px-2 py-1 text-white"}>{projectId}</Text>
+                    <Text weight='medium' className={"bg-sky-300 rounded-md px-2 py-1 text-sky-800"}>{projectId}</Text>
                     .illusion.com
-                    { endpointPrefix ? <Text weight='medium' className={"bg-yellow-500 rounded-md px-2 py-1 text-white"}>{endpointPrefix}</Text> : '' }
+                    { endpointPrefix ? <Text weight='medium' className={"bg-yellow-200 rounded-md px-2 py-1 text-yellow-800"}>{endpointPrefix}</Text> : '' }
                     /
-                    <Text weight='medium' className={"bg-red-500 rounded-md px-2 py-1 text-white"}>:endpoint</Text>
+                    <Text weight='medium' className={"bg-red-200 rounded-md px-2 py-1 text-red-800"}>:endpoint</Text>
                 </Text>
             </div>
         </div>

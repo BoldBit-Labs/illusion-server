@@ -12,7 +12,7 @@ import SigninPage from "../pages/authPages/SigninPage";
 import SignupPage from "../pages/authPages/SignupPage";
 import Dashboard from "../pages/HomePage/dashboard/Dashboard";
 import authServiceInstance from "../services/AuthService";
-import NewProject from "../pages/projectsPage/NewProject";
+import NewProject from "../pages/HomePage/dashboard/NewProject";
 import Project from "../pages/projectsPage/Project";
 
 const router = createBrowserRouter(

@@ -38,6 +38,6 @@ public class Project {
     @AllArgsConstructor
     public static class Endpoint {
         private String id;
-        private String url;
+        private String path;
     }
 }

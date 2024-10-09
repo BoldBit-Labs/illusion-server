@@ -6,7 +6,7 @@ public record Endpoint(
         String id,
         String projectId,
         String collectionId,
-        String url,
+        String path,
         Map<String, Boolean> allowedMethods,
         Map<String, Object> schema
 ) {

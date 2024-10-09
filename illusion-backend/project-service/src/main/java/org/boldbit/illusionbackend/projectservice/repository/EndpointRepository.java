@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EndpointRepository extends MongoRepository<Endpoint, String> {
-    Optional<Endpoint> findByProjectIdAndUrl(String projectId, String url);
+    Optional<Endpoint> findByProjectIdAndPath(String projectId, String path);
 
     List<Endpoint> findAllByProjectId(String ownerId);
 }

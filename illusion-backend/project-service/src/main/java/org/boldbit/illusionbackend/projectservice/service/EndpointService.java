@@ -20,10 +20,10 @@ public class EndpointService {
 
     public String createEndpoint(Endpoint endpoint) {
         Optional<Endpoint> existingEndpoint = endpointRepository
-                .findByProjectIdAndUrl(endpoint.getProjectId(), endpoint.getUrl());
+                .findByProjectIdAndPath(endpoint.getProjectId(), endpoint.getPath());
 
         if (existingEndpoint.isPresent()) {
-            throw new RuntimeException("Endpoint with the same URL already exists");
+            throw new RuntimeException("Endpoint with the same Path already exists");
         }
 
         endpoint.setSchema(mapJsonSchemaToJava(endpoint.getSchema()));
@@ -31,7 +31,7 @@ public class EndpointService {
 
         Map<String, Object> endpointProperties = new HashMap<>();
         endpointProperties.put("id", endpointId);
-        endpointProperties.put("url", endpoint.getUrl());
+        endpointProperties.put("path", endpoint.getPath());
         projectService.updateProject(endpoint.getProjectId(), Collections.singletonMap("endpoints", endpointProperties));
 
         return endpointId;
@@ -63,8 +63,8 @@ public class EndpointService {
 
         updates.forEach((field, value) -> {
             switch (field) {
-                case "url":
-                    endpoint.setUrl((String) value);
+                case "path":
+                    endpoint.setPath((String) value);
                     break;
                 case "collectionId":
                     endpoint.setCollectionId((String) value);

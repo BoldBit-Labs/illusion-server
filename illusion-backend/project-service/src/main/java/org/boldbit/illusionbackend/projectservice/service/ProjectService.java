@@ -114,14 +114,14 @@ public class ProjectService {
         List<Project.Endpoint> endpoints = Optional.ofNullable(project.getEndpoints()).orElse(new ArrayList<>());
 
         boolean endpointExists = endpoints.stream()
-                .anyMatch(endpoint -> endpoint.getUrl().equals(updates.get("url")));
+                .anyMatch(endpoint -> endpoint.getPath() != null && endpoint.getPath().equals(updates.get("path")));
 
         if (endpointExists) {
-            log.warn("Endpoint with url '{}' already exists", updates.get("url"));
+            log.warn("Endpoint with Path '{}' already exists", updates.get("path"));
             throw new IllegalArgumentException("Endpoint already exists");
         }
 
-        endpoints.add(new Project.Endpoint(updates.get("id"), updates.get("url")));
+        endpoints.add(new Project.Endpoint(updates.get("id"), updates.get("path")));
         project.setEndpoints(endpoints);
         projectRepository.save(project);
         log.info("Endpoint added successfully");

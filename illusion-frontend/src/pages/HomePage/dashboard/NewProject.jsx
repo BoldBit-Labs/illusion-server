@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Label from "../../components/Label";
-import Input from "../../components/Input";
-import Button from "../../components/Button";
-import Text from "../../components/Text";
-import projectServiceInstance from "../../services/ProjectService";
+import Label from "../../../components/Label";
+import Input from "../../../components/Input";
+import Button from "../../../components/Button";
+import Text from "../../../components/Text";
+import projectServiceInstance from "../../../services/ProjectService";
 
 function NewProject() {
     const [projectName, setProjectName] = useState("");
