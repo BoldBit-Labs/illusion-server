@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(name = "user-service", url = "http://localhost:8882")
+@FeignClient(name = "user-service", url = "http://user-service:8882")
 public interface UserClient {
 
     @PutMapping("/api/user/{userId}")

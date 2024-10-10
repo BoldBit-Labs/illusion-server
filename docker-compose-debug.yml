@@ -1,0 +1,156 @@
+services:
+
+  illusion-frontend:
+    container_name: frontend
+    build:
+      context: ./illusion-frontend
+    ports:
+      - 3333:3333
+    expose:
+      - 3333
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      NODE_ENV: production
+
+  # MongoDB Service
+  mongodb:
+    image: mongo
+    container_name: mongo_db
+    restart: always
+    ports:
+      - "27027:27017" # fixme: use 27017 in production
+    volumes:
+      - mongo:/data/db  # Persist MongoDB data
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin
+    networks:
+      - illusion-network
+
+  # Mongo Express Service
+  mongo-express:
+    image: mongo-express
+    container_name: mongo_express
+    restart: always
+    depends_on:
+      - mongodb
+    ports:
+      - "8889:8081" # fixme: use 8081 in production
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: admin
+      ME_CONFIG_MONGODB_SERVER: mongodb
+      ME_CONFIG_BASICAUTH_USERNAME: mongo_user
+      ME_CONFIG_BASICAUTH_PASSWORD: mongo_pass
+    networks:
+      - illusion-network
+
+  config-server:
+    container_name: config-server
+    build:
+      context: ./illusion-backend/config-server
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    networks:
+      - illusion-network
+    restart: always
+
+  discovery-server:
+    container_name: discovery-server
+    build:
+      context: ./illusion-backend/discovery-server
+    depends_on:
+      - config-server
+    ports:
+      - "8880:8880"
+    expose:
+      - "8880"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  gateway:
+    container_name: gateway
+    build:
+      context: ./illusion-backend/gateway
+    depends_on:
+      - discovery-server
+    ports:
+      - "8881:8881"
+      - "5001:5001" # remote debugging port
+    expose:
+      - "8881"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5001
+
+  user-service:
+    container_name: user-service
+    build:
+      context: ./illusion-backend/user-service
+    depends_on:
+      - gateway
+    ports:
+      - "8882:8882"
+      - "5002:5002" # remote debugging port
+    expose:
+      - "8882"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5002
+
+  project-service:
+    container_name: project-service
+    build:
+      context: ./illusion-backend/project-service
+    depends_on:
+      - gateway
+    ports:
+      - "8883:8883"
+      - "5003:5003" # remote debugging port
+    expose:
+      - "8883"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5003
+
+  api-generator-service:
+    container_name: api-generator-service
+    build:
+      context: ./illusion-backend/api-generator-service
+    depends_on:
+      - gateway
+    ports:
+      - "8884:8884"
+      - "5004:5004" # remote debugging port
+    expose:
+      - "8884"
+    networks:
+      - illusion-network
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_TOOL_OPTIONS=-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5004
+
+networks:
+  illusion-network:
+    driver: bridge
+
+volumes:
+  mongo:
+    driver: local
