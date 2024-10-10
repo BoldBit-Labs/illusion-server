@@ -12,7 +12,6 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const projectId = projectIdRef;
   const endpointPrefix = endpointPrefixRef;
-  const [fullPath, setFullPath] = useState("");
   const [path, setPath] = useState("");
   const [description, setDescription] = useState("");
   const [schema, setSchema] = useState({});
@@ -37,7 +36,7 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
 
     if (validateForm()) {
       setLoading(true);
-      await handleFullPath();
+      const fullPath = await handleFullPath();
       const data = { projectId, fullPath, description, schema, allowedMethods };
       const success = await endpointServiceInstance.createEndpoint(data);
       if (success !== null) {
@@ -83,9 +82,9 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
 
   const handleFullPath = async () => {
     if (endpointPrefix.endsWith("/")) {
-      setFullPath(`${endpointPrefix.slice(0, -1)}${path}`);
+      return `${endpointPrefix.slice(0, -1)}${path}`;
     } else {
-      setFullPath(`${endpointPrefix}${path}`);
+      return `${endpointPrefix}${path}`;
     }
   };
   
