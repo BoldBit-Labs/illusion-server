@@ -8,9 +8,11 @@ import Schema from './Schema';
 import endpointServiceInstance from '../../services/EndpointService';
 import Loader from '../../components/Loader';
 
-const NewEndpointModal = ({ projectInfo, formSubmit }) => {
+const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const projectId = projectInfo;
+  const projectId = projectIdRef;
+  const endpointPrefix = endpointPrefixRef;
+  const [fullPath, setFullPath] = useState("");
   const [path, setPath] = useState("");
   const [description, setDescription] = useState("");
   const [schema, setSchema] = useState({});
@@ -35,7 +37,8 @@ const NewEndpointModal = ({ projectInfo, formSubmit }) => {
 
     if (validateForm()) {
       setLoading(true);
-      const data = { projectId, path, description, schema, allowedMethods };
+      handleFullPath();
+      const data = { projectId, fullPath, description, schema, allowedMethods };
       const success = await endpointServiceInstance.createEndpoint(data);
       if (success !== null) {
         setIsModalOpen(false);
@@ -78,6 +81,14 @@ const NewEndpointModal = ({ projectInfo, formSubmit }) => {
     return urlPathRegex.test(path);
   };
 
+  const handleFullPath = () => {
+    if (endpointPrefix.endsWith("/")) {
+      setFullPath(`${endpointPrefix.slice(0, -1)}${path}`);
+    } else {
+      setFullPath(`${endpointPrefix}${path}`);
+    }
+  };
+  
   return (
     <div>
       <div className="mt-8 w-fit">

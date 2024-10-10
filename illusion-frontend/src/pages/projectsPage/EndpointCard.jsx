@@ -5,7 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function EndpointCard({ project, endpoint }) {
-    const fullUrl = `https://${endpoint.id}.illusion-server.buzz${project.endpointPrefix ? project.endpointPrefix : ''}${endpoint.path}`;
+    const fullUrl = `https://${project.id}.illusion-server.buzz${endpoint.path}`;
 
     const colors = [
         { text: 'text-red-800', bg: 'bg-red-200' },

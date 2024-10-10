@@ -24,11 +24,10 @@ public class RequestObject {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class Authority {
-        private String host; // e.g., "www.example.com"
+        private String host; // e.g., "api.example.com"
         private String subdomain; // e.g., "api"
         private String domain; // e.g., "example"
         private String extension; // e.g., "com"
-        private int port; // Optional port, e.g., "8080"
     }
 
     public enum Scheme {

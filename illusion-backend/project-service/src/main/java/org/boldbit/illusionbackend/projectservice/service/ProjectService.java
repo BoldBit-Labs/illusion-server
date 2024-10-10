@@ -118,6 +118,7 @@ public class ProjectService {
 
         if (endpointExists) {
             log.warn("Endpoint with Path '{}' already exists", updates.get("path"));
+            // todo: update path in project also
             throw new IllegalArgumentException("Endpoint already exists");
         }
 

@@ -61,10 +61,9 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException("User not found"));
         if (user.getPassword().equals(password.get("password"))) {
             userRepository.delete(user);
-            log.info("User deleted with ID: {}", userId);
             return true;
         }
-        throw new UserNotFoundException("incorrect password");
+        return false;
     }
 
     public User updateUser(String userId, Map<String, Object> updates) {

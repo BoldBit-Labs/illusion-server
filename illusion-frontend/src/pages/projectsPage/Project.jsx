@@ -57,7 +57,7 @@ function Project() {
           </div>
         )}
 
-        <NewEndpointModal projectInfo={projectId} formSubmit={fetchEndpoints} />
+        <NewEndpointModal projectIdRef={projectId} endpointPrefixRef={project.endpointPrefix} formSubmit={fetchEndpoints} />
       </div>
 
       <div className="w-2/3 pl-12">

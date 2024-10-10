@@ -21,7 +21,7 @@ class EndpointService {
         `${process.env.REACT_APP_BASE_URL}/api/endpoints/create-endpoint`, 
         {
           projectId: postData.projectId,
-          path: postData.path,
+          path: postData.fullPath,
           description: postData.description,
           schema: postData.schema,
           allowedMethods: postData.allowedMethods

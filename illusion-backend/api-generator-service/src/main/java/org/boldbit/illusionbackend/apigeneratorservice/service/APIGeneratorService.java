@@ -74,9 +74,14 @@ public class APIGeneratorService {
             String host = httpServletRequest.getHeader("x-forwarded-host");
             RequestObject.Authority authority = new RequestObject.Authority();
             authority.setSubdomain(host.split("\\.")[0]);
-            authority.setDomain(host.split("\\.")[1]);
-            authority.setExtension(host.split("\\.")[2].split(":")[0]);
-            authority.setPort(Integer.parseInt(host.split("\\.")[2].split(":")[1]));
+            // testing:
+            if(host.contains("localhost")) {
+                authority.setDomain("localhost");
+                authority.setExtension("");
+            } else {
+                authority.setDomain(host.split("\\.")[1]);
+                authority.setExtension(host.split("\\.")[2].split(":")[0]);
+            }
             authority.setHost(host);
             requestObject.setAuthority(authority);
 

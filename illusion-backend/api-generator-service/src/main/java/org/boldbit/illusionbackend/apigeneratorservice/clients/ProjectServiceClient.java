@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@FeignClient(name = "project-service", url = "http://localhost:8891")
+@FeignClient(name = "project-service", url = "http://localhost:8881")
 public interface ProjectServiceClient {
 
     @GetMapping("/api/projects/project/{projectId}")
