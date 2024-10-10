@@ -1,10 +1,13 @@
 package org.boldbit.illusionbackend.apigeneratorservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.boldbit.illusionbackend.apigeneratorservice.controller.APIGeneratorController;
 import org.boldbit.illusionbackend.apigeneratorservice.model.DataModel;
 import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,8 +24,10 @@ public class PostRequestService {
     private final Utils utils;
     private final DataModelRepository bigDBRepository;
     private final DataModelsRegistryRepository registryRepository;
+    private static final Logger logger = LoggerFactory.getLogger(PostRequestService.class);
 
     protected ResponseEntity<?> handlePostRequest(String collectionId, Map<String, Object> schema, Map<String, Object> body) {
+        logger.info("handlePostRequest called");
         utils.validateSchema(schema, body);
         DataModel bigDB = new DataModel();
         bigDB.setJsonObject(body);

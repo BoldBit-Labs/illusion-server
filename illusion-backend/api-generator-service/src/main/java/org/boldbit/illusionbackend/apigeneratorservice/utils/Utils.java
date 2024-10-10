@@ -2,6 +2,7 @@ package org.boldbit.illusionbackend.apigeneratorservice.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceClient;
+import org.boldbit.illusionbackend.apigeneratorservice.controller.APIGeneratorController;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.BodyMismatchException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
@@ -10,6 +11,8 @@ import org.boldbit.illusionbackend.apigeneratorservice.model.DataModelsRegistry;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Endpoint;
 import org.boldbit.illusionbackend.apigeneratorservice.model.Project;
 import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +25,7 @@ public class Utils {
 
     private final ProjectServiceClient projectServiceClient;
     private final DataModelsRegistryRepository registryRepository;
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class);
 
     public void validateSchema(Map<String, Object> schema, Map<String, Object> body) {
         Map<String, Object> bodySchema = mapJsonSchemaToJava(body);
@@ -161,6 +165,7 @@ public class Utils {
     }
 
     public Endpoint validAPIRequest(String projectId, String path, String httpMethod) {
+        logger.info("Validating API Request");
         Project project = projectServiceClient.getProjectById(projectId);
 
         Project.Endpoint matchingEndpoint = project.endpoints().stream()

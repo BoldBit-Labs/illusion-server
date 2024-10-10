@@ -4,12 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.boldbit.illusionbackend.apigeneratorservice.clients.ProjectServiceClient;
+import org.boldbit.illusionbackend.apigeneratorservice.controller.APIGeneratorController;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.MethodNotAllowedException;
 import org.boldbit.illusionbackend.apigeneratorservice.exceptions.NoMatchingEndpointFound;
 import org.boldbit.illusionbackend.apigeneratorservice.model.*;
 import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelsRegistryRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.repository.DataModelRepository;
 import org.boldbit.illusionbackend.apigeneratorservice.utils.Utils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +33,7 @@ public class APIGeneratorService {
     private final PutRequestService putRequestService;
     private final PatchRequestService patchRequestService;
     private final DeleteRequestService deleteRequestService;
+    private static final Logger logger = LoggerFactory.getLogger(APIGeneratorService.class);
 
     public ResponseEntity<?> requestHandler(String pathVariable,
                                          Map<String, Object> requestBody,
@@ -66,6 +70,7 @@ public class APIGeneratorService {
                                         Map<String, Object> requestBody,
                                         Map<String, Object> allQueryParams,
                                         HttpServletRequest httpServletRequest) {
+        logger.info("in FillRequestObject");
         RequestObject requestObject = new RequestObject();
         try {
             requestObject.setHttpMethod(RequestObject.HttpMethod.valueOf(httpServletRequest.getMethod()));
