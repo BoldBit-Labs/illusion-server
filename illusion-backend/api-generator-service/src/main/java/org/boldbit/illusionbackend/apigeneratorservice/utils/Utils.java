@@ -176,7 +176,7 @@ public class Utils {
         Endpoint endpoint = projectServiceClient.getEndpointById(matchingEndpoint.id());
 
         // fixme: fix method case
-        if (!endpoint.allowedMethods().getOrDefault(httpMethod.toLowerCase(), false)) {
+        if (!endpoint.allowedMethods().getOrDefault(httpMethod, false)) {
             throw new MethodNotAllowedException(httpMethod + " Http method not allowed for this endpoint");
         }
 

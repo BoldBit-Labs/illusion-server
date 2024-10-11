@@ -81,13 +81,14 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
   };
 
   const handleFullPath = (endpointPrefix, path) => {
+    if (!endpointPrefix) return path;
     if (endpointPrefix.endsWith("/")) {
-        return `${endpointPrefix.slice(0, -1)}${path}`;
+      return `${endpointPrefix.slice(0, -1)}${path}`;
     } else {
-        return `${endpointPrefix}${path}`;
+      return `${endpointPrefix}${path}`;
     }
-  }
-  
+  };
+
   return (
     <div>
       <div className="mt-8 w-fit">
