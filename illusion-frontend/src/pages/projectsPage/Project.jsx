@@ -68,7 +68,7 @@ function Project() {
         ) : (
           <ul className="">
             {endpoints.map((endpoint) => (
-              <EndpointCard project={project} endpoint={endpoint} />
+              <EndpointCard project={project} endpoint={endpoint} onDelete={fetchEndpoints} />
             ))}
           </ul>
         )}

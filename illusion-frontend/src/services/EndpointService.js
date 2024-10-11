@@ -55,19 +55,19 @@ class EndpointService {
   //   }
   // }
 
-  // async deleteProject(projectId) {
-  //   try {
-  //     const response = await axios.delete( `${process.env.REACT_APP_BASE_URL}/api/projects/${projectId}` );
-  //     if (response.status === 200) {
-  //       return response.data;
-  //     }
+  async deleteEndpoint(endpointId) {
+    try {
+      const response = await axios.delete( `${process.env.REACT_APP_BASE_URL}/api/endpoints/${endpointId}` );
+      if (response.status === 200) {
+        return response.data;
+      }
 
-  //     return [];
-  //   } catch (error) {
-  //     console.error("Error in fetching projects:", error);
-  //     return [];
-  //   }
-  // }
+      return [];
+    } catch (error) {
+      console.error("Error in deleting endponit:", error);
+      return [];
+    }
+  }
 }
 
 const endpointServiceInstance = new EndpointService();

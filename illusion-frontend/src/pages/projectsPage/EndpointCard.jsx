@@ -3,8 +3,9 @@ import Text from '../../components/Text';
 import { FaRegTrashCan, FaRegCopy, FaRegPenToSquare } from "react-icons/fa6";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import endpointServiceInstance from '../../services/EndpointService';
 
-function EndpointCard({ project, endpoint }) {
+function EndpointCard({ project, endpoint, onDelete }) {
     const fullUrl = `https://${project.id}.illusion-server.buzz${endpoint.path}`;
 
     const colors = [
@@ -31,6 +32,15 @@ function EndpointCard({ project, endpoint }) {
         }
     };
 
+    const deleteEndpoint = async (endpointId) => {
+        const success = await endpointServiceInstance.deleteEndpoint(endpointId);
+        if (success) {
+            onDelete();
+        } else {
+            toast.error("Failed to delete endpoint!")
+        }
+    };
+
     // Randomly select a color
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
@@ -43,7 +53,7 @@ function EndpointCard({ project, endpoint }) {
                     <div className="flex">
                         <FaRegPenToSquare className="hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); console.log("Edit Endpoint: "); }} />
                         <FaRegCopy className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); copyToClipboard() }} />
-                        <FaRegTrashCan className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); console.log("Deleting endpoint: ", endpoint.id); }} />
+                        <FaRegTrashCan className="ml-4 hover:scale-150 duration-200" onClick={(event) => { event.stopPropagation(); deleteEndpoint(endpoint.id); }} />
                     </div>
                 </div>
                 <div className="flex items-center mb-2">
