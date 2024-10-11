@@ -36,7 +36,7 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
 
     if (validateForm()) {
       setLoading(true);
-      const fullPath = await handleFullPath();
+      const fullPath = handleFullPath(endpointPrefix, path);
       const data = { projectId, fullPath, description, schema, allowedMethods };
       const success = await endpointServiceInstance.createEndpoint(data);
       if (success !== null) {
@@ -80,13 +80,13 @@ const NewEndpointModal = ({ projectIdRef, endpointPrefixRef, formSubmit }) => {
     return urlPathRegex.test(path);
   };
 
-  const handleFullPath = async () => {
+  const handleFullPath = (endpointPrefix, path) => {
     if (endpointPrefix.endsWith("/")) {
-      return `${endpointPrefix.slice(0, -1)}${path}`;
+        return `${endpointPrefix.slice(0, -1)}${path}`;
     } else {
-      return `${endpointPrefix}${path}`;
+        return `${endpointPrefix}${path}`;
     }
-  };
+  }
   
   return (
     <div>
